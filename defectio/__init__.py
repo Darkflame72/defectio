@@ -4,7 +4,7 @@ Revolt API Wrapper
 
 A python wrapper for the Revolt API.
 
-:copyright: (c) 2021-present Darkflame72
+:copyright: (c) 2021-present Darkflame72.
 :license: MIT, see LICENSE for more details.
 
 """
