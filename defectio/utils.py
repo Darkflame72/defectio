@@ -21,12 +21,12 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 import datetime
+from operator import attrgetter
 from typing import Any
 from typing import Callable
 from typing import Iterable
 from typing import Optional
 from typing import TypeVar
-from operator import attrgetter
 
 T = TypeVar("T")
 
@@ -37,11 +37,13 @@ def find(predicate: Callable[[T], Any], seq: Iterable[T]) -> Optional[T]:
             return element
     return None
 
+
 def compute_timedelta(dt: datetime.datetime):
     if dt.tzinfo is None:
         dt = dt.astimezone()
     now = datetime.datetime.now(datetime.timezone.utc)
     return max((dt - now).total_seconds(), 0)
+
 
 def get(iterable: Iterable[T], **attrs: Any) -> Optional[T]:
     """A helper that returns the first element in the iterable that meets
@@ -66,7 +68,7 @@ def get(iterable: Iterable[T], **attrs: Any) -> Optional[T]:
     Nested attribute matching:
     .. code-block:: python3
         channel = discord.utils.get(client.get_all_channels(), guild__name='Cool', name='general')
-    
+
     Parameters
     -----------
     iterable

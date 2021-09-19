@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+from defectio.models.objects import Unique
 import io
 from typing import Optional
 from typing import TYPE_CHECKING
@@ -34,6 +35,7 @@ class Attachment:
         base_url = self._state.api_info["features"]["autumn"]["url"]
 
         return f"{base_url}/{self.tag}/{self.id}"
+
 
 class Reply:
     def __init__(self, message: Message, mention: Optional[bool] = True):
@@ -83,7 +85,7 @@ class File:
         self.filename = filename
 
 
-class Message(Hashable):
+class Message(Unique):
     def __init__(
         self, state: ConnectionState, channel: MessageableChannel, data: MessagePayload
     ):

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import copy
-from defectio.models.server import Role
 import inspect
 import logging
 from collections import deque
@@ -12,6 +11,8 @@ from typing import Deque
 from typing import Optional
 from typing import TYPE_CHECKING
 from typing import Union
+
+from defectio.models.server import Role
 
 from . import utils
 from .gateway import DefectioWebsocket

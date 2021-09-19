@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import asyncio
-from typing import TYPE_CHECKING, TypeVar, Optional, Type
+from typing import Optional
+from typing import Type
+from typing import TYPE_CHECKING
+from typing import TypeVar
 
 if TYPE_CHECKING:
     from .models.abc import Messageable

@@ -39,7 +39,7 @@ Self Bots
 ~~~~~~~~~~~~~~~~~~~~~
 
 Unlike Discord, self bots are allowed and are to a certain extent encouraged. These can be used to enhance and customise
-your Revolt experience. You have the option to login as a user or as a bot the two are functionality identical. The 
+your Revolt experience. You have the option to login as a user or as a bot the two are functionality identical. The
 different connection methods are as follows:
 
     .. code-block:: python
@@ -52,4 +52,3 @@ different connection methods are as follows:
 
         # Login as a bot
         client = Client().run("bot_token")
-

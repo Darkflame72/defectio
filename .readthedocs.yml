@@ -1,10 +1,10 @@
 version: 2
 build:
-   image: testing
+    image: testing
 sphinx:
-  configuration: docs/conf.py
+    configuration: docs/conf.py
 formats: []
 python:
-  version: 3.9
-  install:
-    - requirements: docs/requirements.txt
+    version: 3.9
+    install:
+        - requirements: docs/requirements.txt

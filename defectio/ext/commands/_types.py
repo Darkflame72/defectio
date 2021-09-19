@@ -20,8 +20,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
-
-from typing import Any, Callable, Coroutine, TYPE_CHECKING, TypeVar, Union
+from typing import Any
+from typing import Callable
+from typing import Coroutine
+from typing import TYPE_CHECKING
+from typing import TypeVar
+from typing import Union
 
 
 if TYPE_CHECKING:
@@ -29,15 +33,23 @@ if TYPE_CHECKING:
     from .cog import Cog
     from .errors import CommandError
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 Coro = Coroutine[Any, Any, T]
 MaybeCoro = Union[T, Coro[T]]
 CoroFunc = Callable[..., Coro[Any]]
 
-Check = Union[Callable[["Cog", "Context[Any]"], MaybeCoro[bool]], Callable[["Context[Any]"], MaybeCoro[bool]]]
-Hook = Union[Callable[["Cog", "Context[Any]"], Coro[Any]], Callable[["Context[Any]"], Coro[Any]]]
-Error = Union[Callable[["Cog", "Context[Any]", "CommandError"], Coro[Any]], Callable[["Context[Any]", "CommandError"], Coro[Any]]]
+Check = Union[
+    Callable[["Cog", "Context[Any]"], MaybeCoro[bool]],
+    Callable[["Context[Any]"], MaybeCoro[bool]],
+]
+Hook = Union[
+    Callable[["Cog", "Context[Any]"], Coro[Any]], Callable[["Context[Any]"], Coro[Any]]
+]
+Error = Union[
+    Callable[["Cog", "Context[Any]", "CommandError"], Coro[Any]],
+    Callable[["Context[Any]", "CommandError"], Coro[Any]],
+]
 
 
 # This is merely a tag type to avoid circular import issues.

@@ -1,5 +1,6 @@
-from defectio.ext import commands
 import random
+
+from defectio.ext import commands
 
 description = """An example bot to showcase the defectio.ext.commands extension
 module.

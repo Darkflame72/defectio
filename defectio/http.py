@@ -10,8 +10,10 @@ from typing import Union
 import aiohttp
 import orjson as json
 import ulid
-from defectio.errors import HTTPException, NotFound, Forbidden
+from defectio.errors import Forbidden
+from defectio.errors import HTTPException
 from defectio.errors import LoginFailure
+from defectio.errors import NotFound
 from defectio.errors import RevoltServerError
 from defectio.models.apiinfo import ApiInfo
 

@@ -5,12 +5,12 @@ import logging
 from typing import Any
 from typing import TYPE_CHECKING
 from typing import Union
-from .backoff import ExponentialBackoff
 
 import aiohttp
 import orjson as json
 from defectio.errors import LoginFailure
 
+from .backoff import ExponentialBackoff
 from .types.websocket import Authenticated
 from .types.websocket import Error
 
@@ -64,7 +64,7 @@ class DefectioWebsocket:
                 payload = json.loads(auth_event.data)
                 if payload.get("type") in valid:
                     break
-                
+
         if payload.get("type") == "Error":
             response = Error(payload)
         elif payload.get("type") == "Authenticated":

@@ -24,8 +24,8 @@
   color: f00000
 - name: style
   description:
-    Changes that do not affect the meaning of the code (white-space, formatting,
-    etc)
+      Changes that do not affect the meaning of the code (white-space, formatting,
+      etc)
   color: ffc6df
 - name: task
   description:
