@@ -9,18 +9,19 @@ from typing import Any
 from typing import Callable
 from typing import Coroutine
 from typing import Optional
+from typing import Sequence
 from typing import TYPE_CHECKING
-from typing import TypeVar, Sequence
+from typing import TypeVar
 
 import aiohttp
+from defectio import utils
 from defectio.models.auth import Auth
 from defectio.models.user import ClientUser
-from defectio import utils
-from .models import Message
 
 from . import __version__
 from .gateway import DefectioWebsocket
 from .http import DefectioHTTP
+from .models import Message
 from .models import User
 from .state import ConnectionState
 

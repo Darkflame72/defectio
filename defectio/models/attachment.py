@@ -1,12 +1,15 @@
 from __future__ import annotations
+from defectio.models.objects import Unique
 
 import io
 import os
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 from typing import Optional
+from typing import TYPE_CHECKING
 from typing import Union
 
 from defectio.models.mixins import Hashable
+
 from ..errors import DefectioException
 
 if TYPE_CHECKING:
@@ -14,7 +17,7 @@ if TYPE_CHECKING:
     from ..types.payloads import AttachmentPayload
 
 
-class AutumnID(Hashable):
+class AutumnID(Unique):
     """
     Attributes
     ------------
@@ -31,10 +34,7 @@ class AutumnID(Hashable):
         return self.id or ""
 
 
-class Attachment(Hashable):
-    url: str
-    _state: Optional[ConnectionState]
-
+class Attachment(Unique):
     def __init__(self, *, data: AttachmentPayload, state: ConnectionState):
         self.id: int = data["_id"]
         self.tag: Literal["attachments"] = data["tag"]

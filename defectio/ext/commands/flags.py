@@ -22,39 +22,34 @@ DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
 
-from .errors import (
-    BadFlagArgument,
-    CommandError,
-    MissingFlagArgument,
-    TooManyFlags,
-    MissingRequiredFlag,
-)
+import inspect
+import re
+import sys
+from dataclasses import dataclass
+from dataclasses import field
+from typing import Any
+from typing import Dict
+from typing import Iterator
+from typing import List
+from typing import Literal
+from typing import Optional
+from typing import Pattern
+from typing import Set
+from typing import Tuple
+from typing import Type
+from typing import TYPE_CHECKING
+from typing import TypeVar
+from typing import Union
 
+from .converter import run_converters
+from .errors import BadFlagArgument
+from .errors import CommandError
+from .errors import MissingFlagArgument
+from .errors import MissingRequiredFlag
+from .errors import TooManyFlags
+from .utils import maybe_coroutine
 from .utils import resolve_annotation
 from .view import StringView
-from .converter import run_converters
-
-from .utils import maybe_coroutine
-from dataclasses import dataclass, field
-from typing import (
-    Dict,
-    Iterator,
-    Literal,
-    Optional,
-    Pattern,
-    Set,
-    TYPE_CHECKING,
-    Tuple,
-    List,
-    Any,
-    Type,
-    TypeVar,
-    Union,
-)
-
-import inspect
-import sys
-import re
 
 __all__ = (
     "Flag",

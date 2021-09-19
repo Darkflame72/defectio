@@ -5,12 +5,12 @@ import logging
 from typing import Any
 from typing import TYPE_CHECKING
 from typing import Union
-from .backoff import ExponentialBackoff
 
 import aiohttp
 import orjson as json
 from defectio.errors import LoginFailure
 
+from .backoff import ExponentialBackoff
 from .types.websocket import Authenticated
 from .types.websocket import Error
 
@@ -47,13 +47,13 @@ class DefectioWebsocket:
     async def close(self) -> None:
         if self._closed:
             return
-        if not self.ws.closed:
+        if not self.websocket.closed:
             await self.websocket.close()
         self._closed = True
         self.authenticated = False
 
-    async def send_payload(self, payload: Any) -> None:
-        await self.websocket.send_str(json.dumps(payload).decode("utf-8"))
+    async def send_payload(self, payload: dict[str, Any]) -> None:
+        await self.websocket.send_json(payload)
 
     async def wait_for_auth(self) -> Union[Error, Authenticated]:
         response: Union[Error, Authenticated]
@@ -64,7 +64,7 @@ class DefectioWebsocket:
                 payload = json.loads(auth_event.data)
                 if payload.get("type") in valid:
                     break
-                
+
         if payload.get("type") == "Error":
             response = Error(payload)
         elif payload.get("type") == "Authenticated":

@@ -22,15 +22,21 @@ DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
 
-
-from typing import Any, Callable, Deque, Dict, Optional, Type, TypeVar, TYPE_CHECKING
-import time
 import asyncio
+import time
 from collections import deque
+from enum import Enum
+from typing import Any
+from typing import Callable
+from typing import Deque
+from typing import Dict
+from typing import Optional
+from typing import Type
+from typing import TYPE_CHECKING
+from typing import TypeVar
 
 from ...models.abc import PrivateChannel
 from .errors import MaxConcurrencyReached
-from enum import Enum
 
 if TYPE_CHECKING:
     from defectio import Message

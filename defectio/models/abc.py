@@ -1,6 +1,4 @@
 from __future__ import annotations
-from defectio.types.payloads import ChannelPayload
-from defectio.models.server import Category
 
 from typing import Any
 from typing import Optional
@@ -8,6 +6,9 @@ from typing import Protocol
 from typing import runtime_checkable
 from typing import TYPE_CHECKING
 from typing import Union
+
+from defectio.models.server import Category
+from defectio.types.payloads import ChannelPayload
 
 if TYPE_CHECKING:
     from ..state import ConnectionState
@@ -178,15 +179,11 @@ class Messageable(Protocol):
                     file=attachment, tag="attachments"
                 )
                 attachment_ids.append(attach["id"])
-        
+
         replies = [{"id": r.message.id, "mention": r.mention} for r in replies]
         data = await state.http.send_message(
-            channel.id,
-            content=content,
-            attachments=attachment_ids,
-            replies=replies
+            channel.id, content=content, attachments=attachment_ids, replies=replies
         )
-
 
         new_message = state.create_message(channel=channel, data=data)
         if delete_after is not None:

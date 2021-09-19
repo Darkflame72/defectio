@@ -111,4 +111,3 @@ Doing something during cancellation:
                 # if we're cancelled and we have some data left...
                 # let's insert it to our database
                 await self.do_bulk()
-
