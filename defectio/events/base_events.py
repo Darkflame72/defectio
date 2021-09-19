@@ -9,18 +9,3 @@ class Event(abc.ABC):
     @abc.abstractmethod
     def app(self):
         """The application that is sending the event."""
-
-
-class GatewayEvent(Event, abc.ABC):
-    """Base class for any event that was gateway-specific."""
-
-    @property
-    @abc.abstractmethod
-    def gatewat(self) -> Gateway:
-        """Shard that received this event.
-
-        Returns
-        -------
-        Gateway
-            The shard that triggered the event.
-        """
