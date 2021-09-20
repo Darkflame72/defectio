@@ -1,29 +1,29 @@
 from aiohttp.client import ClientSession
-from defectio.models.channel import TextChannel
-from defectio.errors import LoginFailure
-from defectio.types.websocket import Authenticated, Error
-from defectio.models.auth import Auth
-import typing
+from defectio.errors import LoginFailure, Authenticated, Error
+from typing import Optional, TYPE_CHECKING, Any, Union, final
 from defectio.base import gateway
 import asyncio
 import aiohttp
 import logging
 from defectio.backoff import ExponentialBackoff
-from defectio.models import objects
 import msgpack
-from defectio.base.event_manager import EventManager
+
+if TYPE_CHECKING:
+    from defectio.base.event_manager import EventManager
+    from defectio.models import objects
+    from defectio.models.auth import Auth
+    from defectio.models.channel import TextChannel
 
 
 _logger = logging.getLogger("defectio.gateway")
 
 
-@typing.final
+@final
 class Gateway(gateway.Gateway):
     def __init__(
         self,
         *,
         data_format: str = gateway.GatewayDataFormat.JSON,
-        # TODO: add event manager
         event_manager: EventManager,
         auth: Auth,
         url: str,
@@ -43,24 +43,24 @@ class Gateway(gateway.Gateway):
         self._event_manager = event_manager
         self._auth = auth
         self._url = url
-        self._ws: typing.Optional[aiohttp.ClientWebSocketResponse] = None
-        self._run_task: typing.Optional[asyncio.Task[None]] = None
+        self._ws: Optional[aiohttp.ClientWebSocketResponse] = None
+        self._run_task: Optional[asyncio.Task[None]] = None
 
-    async def send_json(self, payload: dict[str, typing.Any]) -> None:
+    async def send_json(self, payload: dict[str, Any]) -> None:
         await self._ws.send_json(payload)
 
     async def read_json(
         self, payload: aiohttp.http_websocket.WSMessage
-    ) -> dict[str, typing.Any]:
+    ) -> dict[str, Any]:
         return await payload.json()
 
-    async def send_msgpack(self, payload: dict[str, typing.Any]) -> None:
+    async def send_msgpack(self, payload: dict[str, Any]) -> None:
         payload = msgpack.packb(payload)
         await self._ws.send_bytes(payload)
 
     async def read_msgpack(
         self, payload: aiohttp.http_websocket.WSMessage
-    ) -> dict[str, typing.Any]:
+    ) -> dict[str, Any]:
         data = await payload.read()
         return msgpack.unpackb(data)
 
@@ -124,8 +124,7 @@ class Gateway(gateway.Gateway):
         payload = {"type": "Ping"}
         await self._send(payload)
 
-    async def _wait_for_auth(self) -> typing.Union[Error, Authenticated]:
-        response: typing.Union[Error, Authenticated]
+    async def _wait_for_auth(self) -> Union[Error, Authenticated]:
         valid = ["Error", "Authenticated"]
         while True:
             auth_event = await self._ws.receive()
@@ -134,6 +133,7 @@ class Gateway(gateway.Gateway):
                 if payload.get("type") in valid:
                     break
 
+        response: Union[Error, Authenticated]
         if payload.get("type") == "Error":
             response = Error(payload)
         elif payload.get("type") == "Authenticated":
@@ -161,9 +161,10 @@ class Gateway(gateway.Gateway):
         _logger.debug("WebSocket Event: %s", msg)
 
         name = payload.get("type")
-        await self._dispatch(payload)
 
-    def _dispatch(self, name: str, data: dict[str, typing.Any]) -> None:
+        await self._dispatch(name, payload)
+
+    def _dispatch(self, name: str, data: dict[str, Any]) -> None:
         try:
             self._event_manager.consume_raw_event(name, self, data)
         except LookupError:
