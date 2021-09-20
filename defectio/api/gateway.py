@@ -11,6 +11,7 @@ import logging
 from defectio.backoff import ExponentialBackoff
 from defectio.models import objects
 import msgpack
+from defectio.base.event_manager import EventManager
 
 
 _logger = logging.getLogger("defectio.gateway")
@@ -23,7 +24,7 @@ class Gateway(gateway.Gateway):
         *,
         data_format: str = gateway.GatewayDataFormat.JSON,
         # TODO: add event manager
-        # event_manager: event_manager_.EventManager,
+        event_manager: EventManager,
         auth: Auth,
         url: str,
     ) -> None:
@@ -39,7 +40,7 @@ class Gateway(gateway.Gateway):
             raise NotImplementedError(f"Unsupported gateway data format: {data_format}")
         self._closing = asyncio.Event()
         self._closed = asyncio.Event()
-        # self._event_manager = event_manager
+        self._event_manager = event_manager
         self._auth = auth
         self._url = url
         self._ws: typing.Optional[aiohttp.ClientWebSocketResponse] = None
@@ -159,8 +160,8 @@ class Gateway(gateway.Gateway):
 
         _logger.debug("WebSocket Event: %s", msg)
 
-        name = payload.get("type").lower()
-        await self._dispatch(name, payload)
+        name = payload.get("type")
+        await self._dispatch(payload)
 
     def _dispatch(self, name: str, data: dict[str, typing.Any]) -> None:
         try:
