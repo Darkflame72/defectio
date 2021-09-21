@@ -1,10 +1,10 @@
 from __future__ import annotations
-from defectio.models.objects import Unique
 
 from typing import Optional
 from typing import TYPE_CHECKING
 from typing import Union
 
+from defectio.models.objects import Unique
 from defectio.models.permission import ChannelPermission
 from defectio.models.server import Role
 
@@ -14,16 +14,19 @@ from .user import User
 
 if TYPE_CHECKING:
     from ..types.payloads import ChannelPayload
-    from ..state import ConnectionState
-    from .server import Server
-    from ..types.payloads import DMChannelPayload
-    from .message import Message
+    from defectio.state import ConnectionState
+    from defectio.models.server import Server
+    from defectio.types.payloads import DMChannelPayload
 
 __all__ = (
     "TextChannel",
     "VoiceChannel",
     "DMChannel",
     "GroupChannel",
+    "PartialChannel",
+    "channel_factory",
+    "MessageableChannel",
+    "ServerChannel",
 )
 
 

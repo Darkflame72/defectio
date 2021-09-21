@@ -1,12 +1,19 @@
-from aiohttp.client import ClientSession
-from defectio.errors import LoginFailure, Authenticated, Error
-from typing import Optional, TYPE_CHECKING, Any, Union, final
-from defectio.base import gateway
 import asyncio
-import aiohttp
 import logging
-from defectio.backoff import ExponentialBackoff
+from typing import Any
+from typing import final
+from typing import Optional
+from typing import TYPE_CHECKING
+from typing import Union
+
+import aiohttp
 import msgpack
+from aiohttp.client import ClientSession
+from defectio.backoff import ExponentialBackoff
+from defectio.base import gateway
+from defectio.errors import Authenticated
+from defectio.errors import Error
+from defectio.errors import LoginFailure
 
 if TYPE_CHECKING:
     from defectio.base.event_manager import EventManager

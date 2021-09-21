@@ -5,7 +5,7 @@ import os
 from typing import Optional
 from typing import Union
 
-__all__ = "File"
+__all__ = ["File"]
 
 
 class File:

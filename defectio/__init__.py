@@ -20,39 +20,22 @@ __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 import logging
 from typing import NamedTuple, Literal
 
-from .client import Client
-from .models import (
-    Message,
-    Reply,
-    User,
-    Server,
-    Member,
-    Role,
-    RawMessageDeleteEvent,
-    RawMessageUpdateEvent,
-    TextChannel,
-    VoiceChannel,
-    GroupChannel,
-    DMChannel,
-    Category,
-    Status,
-    File,
-    Attachment,
-)
-from .models import abc
-from . import utils
-from .errors import (
-    DefectioException,
-    ClientException,
-    GatewayNotFound,
-    HTTPException,
-    Forbidden,
-    RevoltServerError,
-    InvalidArgument,
-    InvalidData,
-    LoginFailure,
-)
+from defectio.client import Client
 
+# expose all models at the top level
+from defectio.models.apiinfo import *
+from defectio.models.attachment import *
+from defectio.models.auth import *
+from defectio.models.channel import *
+from defectio.models.colour import *
+from defectio.models.file import *
+from defectio.models.member import *
+from defectio.models.message import *
+from defectio.models.objects import *
+from defectio.models.permission import *
+from defectio.models.server import *
+from defectio.models.user import *
+from defectio.models.raw_models import *
 
 __all__ = (
     "__title__",
@@ -60,12 +43,8 @@ __all__ = (
     "__license__",
     "__copyright__",
     "__version__",
+    "version_info",
     "Client",
-    "Message",
-    "User",
-    "Server",
-    "Member",
-    "abc",
 )
 
 

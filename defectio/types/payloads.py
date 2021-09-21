@@ -3,7 +3,8 @@ from typing import Literal
 from typing import Optional
 from typing import Tuple
 from typing import Type
-from typing import TypedDict, TYPE_CHECKING
+from typing import TYPE_CHECKING
+from typing import TypedDict
 
 if TYPE_CHECKING:
     from defectio.models.member import Member

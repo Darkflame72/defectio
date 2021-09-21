@@ -1,11 +1,12 @@
 from __future__ import annotations
-from defectio.models.objects import Unique
 
 from typing import Any
 from typing import Optional
 from typing import Type
 from typing import TYPE_CHECKING
 from typing import TypeVar
+
+from defectio.models.objects import Unique
 
 from .. import utils
 from .abc import Messageable
@@ -96,11 +97,6 @@ class Profile:
         return f"<Profile: {self}>"
 
 
-class _UserTag:
-    __slots__ = "id"
-    id: int
-
-
 class UserBot:
     def __init__(self, data, state) -> None:
         if data is None:
@@ -121,7 +117,7 @@ class UserBot:
         return None
 
 
-class PartialUser(Unique, _UserTag, Messageable):
+class PartialUser(Unique, Messageable):
     def __init__(
         self,
         id: str,
@@ -173,9 +169,6 @@ class BaseUser(PartialUser):
 
     def __str__(self) -> str:
         return self.name
-
-    def __eq__(self, other: Any) -> bool:
-        return isinstance(other, _UserTag) and other.id == self.id
 
     def __ne__(self, other: Any) -> bool:
         return not self.__eq__(other)

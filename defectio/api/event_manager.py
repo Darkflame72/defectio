@@ -1,9 +1,13 @@
-from defectio.base import event_manager
-from typing import TYPE_CHECKING, Optional, Any, Callable
-from defectio.base import cache as cache_
 import inspect
 import logging
 import re
+from typing import Any
+from typing import Callable
+from typing import Optional
+from typing import TYPE_CHECKING
+
+from defectio.base import cache as cache_
+from defectio.base import event_manager
 
 if TYPE_CHECKING:
     from defectio.types.websocket import (

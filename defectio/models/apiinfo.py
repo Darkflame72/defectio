@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ..types.payloads import ApiInfoPayload, ApiInfoFeaturePayload
 
-__all__ = ("ApiInfo", "ApiFeatures", "ApiUrl")
+__all__ = ["ApiInfo", "ApiFeatures", "ApiUrl"]
 
 
 class ApiUrl:

@@ -1,5 +1,4 @@
 """Data class containing configuration settings."""
-
 from __future__ import annotations
 
 __all__: typing.List[str] = [
@@ -33,19 +32,10 @@ class CacheComponents(enum.Flag):
     INVITES = 1 << 4
     """Enables the invites cache."""
 
-    EMOJIS = 1 << 5
-    """Enables the invites cache."""
-
-    PRESENCES = 1 << 6
-    """Enables the presences cache."""
-
-    VOICE_STATES = 1 << 7
-    """Enables the voice states cache."""
-
-    MESSAGES = 1 << 8
+    MESSAGES = 1 << 5
     """Enables the messages cache."""
 
-    DM_CHANNEL_IDS = 1 << 10
+    DM_CHANNEL_IDS = 1 << 6
     """Enables the DM channel IDs cache."""
 
     ALL = (
@@ -54,9 +44,6 @@ class CacheComponents(enum.Flag):
         | MEMBERS
         | ROLES
         | INVITES
-        | EMOJIS
-        | PRESENCES
-        | VOICE_STATES
         | MESSAGES
         | DM_CHANNEL_IDS
     )

@@ -1,6 +1,9 @@
 from __future__ import annotations
+
+from typing import Any
+from typing import TYPE_CHECKING
+
 from defectio.types.websocket import ChannelCreatePayload
-from typing import Any, TYPE_CHECKING
 
 __all__: list[str] = ["EventFactory"]
 

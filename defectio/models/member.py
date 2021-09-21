@@ -1,8 +1,8 @@
 from __future__ import annotations
-from defectio.models.objects import Unique
 
 from typing import TYPE_CHECKING
 
+from defectio.models.objects import Unique
 
 from . import abc
 

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import asyncio
-from defectio.models.objects import Unique
 import io
 from typing import Optional
 from typing import TYPE_CHECKING
 from typing import Union
 
+from defectio.models.objects import Unique
 from defectio.models.user import PartialUser
 
 from .abc import Messageable

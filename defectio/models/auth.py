@@ -1,3 +1,8 @@
+from __future__ import annotations
+
+__all__ = ["Auth"]
+
+
 class Auth:
     def __init__(self, data: str, bot: bool = True):
         self.token = str(data)

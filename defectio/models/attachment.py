@@ -1,5 +1,4 @@
 from __future__ import annotations
-from defectio.models.objects import Unique
 
 import io
 import os
@@ -8,13 +7,15 @@ from typing import Optional
 from typing import TYPE_CHECKING
 from typing import Union
 
-from defectio.models.mixins import Hashable
+from defectio.models.objects import Unique, Object
 
 from ..errors import DefectioException
 
 if TYPE_CHECKING:
     from ..state import ConnectionState
     from ..types.payloads import AttachmentPayload
+
+__all__ = ["Attachment"]
 
 
 class AutumnID(Unique):
@@ -28,7 +29,7 @@ class AutumnID(Unique):
     __slots__ = "id"
 
     def __init__(self, *, data):
-        self.id: str = data["id"]
+        self.id = Object(data["id"])
 
     def __str__(self) -> str:
         return self.id or ""

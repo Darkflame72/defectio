@@ -11,8 +11,8 @@ import orjson as json
 from defectio.errors import LoginFailure
 
 from .backoff import ExponentialBackoff
-from .types.websocket import Authenticated
-from .types.websocket import Error
+from .types.websocket import AuthenticatedPayload
+from .types.websocket import ErrorPayload
 
 if TYPE_CHECKING:
     from defectio.client import Client
@@ -55,8 +55,8 @@ class DefectioWebsocket:
     async def send_payload(self, payload: dict[str, Any]) -> None:
         await self.websocket.send_json(payload)
 
-    async def wait_for_auth(self) -> Union[Error, Authenticated]:
-        response: Union[Error, Authenticated]
+    async def wait_for_auth(self) -> Union[ErrorPayload, AuthenticatedPayload]:
+        response: Union[ErrorPayload, AuthenticatedPayload]
         valid = ["Error", "Authenticated"]
         while True:
             auth_event = await self.websocket.receive()
@@ -66,9 +66,9 @@ class DefectioWebsocket:
                     break
 
         if payload.get("type") == "Error":
-            response = Error(payload)
+            response = ErrorPayload(payload)
         elif payload.get("type") == "Authenticated":
-            response = Authenticated(payload)
+            response = AuthenticatedPayload(payload)
         return response
 
     async def start(self, auth: Auth) -> None:
@@ -102,7 +102,7 @@ class DefectioWebsocket:
         try:
             authenticated = await asyncio.wait_for(self.wait_for_auth(), timeout=10)
         except asyncio.TimeoutError:
-            authenticated = Error({"type": "InternalError", "error": "timeout"})
+            authenticated = ErrorPayload({"type": "InternalError", "error": "timeout"})
         if authenticated["type"] != "Authenticated":
             logger.error("Authentication failed.")
             raise LoginFailure(authenticated)

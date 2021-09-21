@@ -1,10 +1,7 @@
 """Provides an interface for REST API implementations to follow."""
 from __future__ import annotations
-from defectio.models.user import Bot
-from defectio.models.permission import Permission
-from defectio.models.member import Member
-from defectio.models.server import Ban, Category, SystemMessages
-from typing import List, Literal, Optional, Sequence, TYPE_CHECKING, Union
+
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import io
@@ -15,6 +12,15 @@ if TYPE_CHECKING:
     from defectio.models.attachment import Attachment
     from defectio.models.permission import ChannelPermission
     from defectio.models.server import Role, Server, Colour
+    from typing import Union
+    from typing import Literal
+    from typing import Optional
+    from defectio.models.member import Member
+    from defectio.models.permission import Permission
+    from defectio.models.server import Ban
+    from defectio.models.server import Category
+    from defectio.models.server import SystemMessages
+    from defectio.models.user import Bot
     from defectio.state import Channel
     from defectio.models.channel import (
         DMChannel,
@@ -35,7 +41,7 @@ if TYPE_CHECKING:
         SessionPayload,
     )
 
-__all__: List[str] = ["RESTClient", "TokenStrategy"]
+__all__ = ["RESTClient"]
 
 import abc
 
@@ -43,7 +49,7 @@ import abc
 class RESTClient(abc.ABC):
     """Interface for functionality that a REST API implementation provides."""
 
-    __slots__: Sequence[str] = ()
+    __slots__: tuple[str] = ()
 
     @property
     @abc.abstractmethod

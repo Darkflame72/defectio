@@ -1,7 +1,11 @@
 import abc
-from defectio.models.server import Role
+from typing import Optional
+from typing import Sequence
+from typing import TYPE_CHECKING
+
 from defectio.models.member import Member
-from typing import Optional, TYPE_CHECKING, Sequence, Tuple
+from defectio.models.objects import ObjectishOr
+from defectio.models.server import Role
 
 if TYPE_CHECKING:
     from defectio.models import (
@@ -14,6 +18,8 @@ if TYPE_CHECKING:
         User,
         DirectMessage,
     )
+
+__all__ = ["Cache", "MutableCache"]
 
 
 class Cache(abc.ABC):
@@ -72,12 +78,14 @@ class Cache(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_server_channel(self, channel) -> Optional[ServerChannel]:
+    def get_server_channel(
+        self, channel: ObjectishOr[ServerChannel]
+    ) -> Optional[ServerChannel]:
         """Get a Server Channel from the cache.
 
         Parameters
         ----------
-        channel : [type]
+        channel : ObjectishOr[ServerChannel]
             Channel to get.
 
         Returns
@@ -97,7 +105,9 @@ class Cache(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_server_channels_view_for_server(self, server) -> dict[str, ServerChannel]:
+    def get_server_channels_view_for_server(
+        self, server: objects.ObjectishOr[Server]
+    ) -> dict[str, ServerChannel]:
         """Get a view of the Server Channels for a specific Server
 
         Parameters

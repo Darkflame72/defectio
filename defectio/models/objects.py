@@ -1,5 +1,4 @@
 """Implementation of a Object type."""
-
 from __future__ import annotations
 
 __all__: typing.List[str] = [
@@ -32,25 +31,16 @@ class Object(str):
     @property
     def created_at(self) -> datetime.datetime:
         """When the object was created."""
-        epoch = ulid.parse(self).timestamp
+        epoch = ulid.parse(self).timestamp()
         return epoch.datetime
 
 
 class Unique(abc.ABC):
     """Mixin for a class that enforces uniqueness by a object ID."""
 
-    __slots__: typing.Sequence[str] = ()
+    __slots__: typing.Sequence[str] = "id"
 
-    @property
-    @abc.abstractmethod
-    def id(self) -> Object:
-        """Return the ID of this entity.
-
-        Returns
-        -------
-        Object
-            The object ID of this object.
-        """
+    id: Object
 
     @property
     def created_at(self) -> datetime.datetime:
