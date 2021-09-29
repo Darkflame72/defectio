@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Callable
 from typing import TYPE_CHECKING
 
 from defectio.types.websocket import ChannelCreatePayload
 
-__all__: list[str] = ["EventFactory"]
+__all__ = ["EventManager"]
 
 import abc
 import asyncio
@@ -37,12 +37,12 @@ if TYPE_CHECKING:
 
 class EventManager(abc.ABC):
     @abc.abstractmethod
-    async def dispatch(self, *args: list[Any]) -> asyncio.Future[Any]:
+    async def dispatch(self, *args: list[Any]) -> asyncio.Future[Callable]:
         """Dispatch event with given arguments.
 
         Returns
         -------
-        asyncio.Future[Any]
+        asyncio.Future[Callable]
             event to dispatch.
         """
 

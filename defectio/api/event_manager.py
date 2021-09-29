@@ -1,3 +1,5 @@
+from defectio.models.raw_models import RawMessageDeleteEvent, RawMessageUpdateEvent
+from defectio.models.message import Message
 import inspect
 import logging
 import re
@@ -8,6 +10,7 @@ from typing import TYPE_CHECKING
 
 from defectio.base import cache as cache_
 from defectio.base import event_manager
+from copy import copy
 
 if TYPE_CHECKING:
     from defectio.types.websocket import (
@@ -34,6 +37,9 @@ if TYPE_CHECKING:
         UserRelationshipPayload,
     )
     import asyncio
+
+__all__ = ["EventManager"]
+
 
 _logger = logging.getLogger("defectio.event_manager")
 
@@ -86,16 +92,22 @@ class EventManager(event_manager.EventManager):
         await self.dispatch("message")
 
     async def parse_message_update(self, payload: MessageUpdatePayload) -> None:
-        if self._cache:
-            pass
+        await self.dispatch("raw_message_update", RawMessageUpdateEvent(payload))
 
-        await self.dispatch("message_update")
+        if self._cache:
+            message = self._cache.get_message(payload["_id"])
+            old_message = copy(message)
+            message._update(payload)
+            await self.dispatch("message_update", old_message, message)
 
     async def parse_message_delete(self, payload: MessageDeletePayload) -> None:
-        if self._cache:
-            pass
+        await self.dispatch("raw_message_delete", RawMessageDeleteEvent(payload))
 
-        await self.dispatch("message_delete")
+        if self._cache:
+            message = self._cache.get_message(payload["_id"])
+            if message is not None:
+                await self.dispatch("message_delete", message)
+                self._cache.delete_message(message)
 
     async def parse_channel_create(self, payload: ChannelCreatePayload) -> None:
         if self._cache:
@@ -152,16 +164,22 @@ class EventManager(event_manager.EventManager):
         await self.dispatch("channel_ack")
 
     async def parse_server_update(self, payload: ServerUpdatePayload) -> None:
-        if self._cache:
-            pass
+        await self.dispatch("raw_server_update", payload)
 
-        await self.dispatch("server_update")
+        if self._cache:
+            server = self._cache.get_server(payload["_id"])
+            old_server = copy(server)
+            server._update(payload)
+            await self.dispatch("server_update", old_server, server)
 
     async def parse_server_delete(self, payload: ServerDeletePayload) -> None:
-        if self._cache:
-            pass
+        await self.dispatch("raw_server_delete", payload)
 
-        await self.dispatch("server_delete")
+        if self._cache:
+            server = self._cache.get_server(payload["_id"])
+            if server is not None:
+                await self.dispatch("server_delete", server)
+                self._cache.delete_server(server)
 
     async def parse_server_member_join(self, payload: ServerMemberJoinPayload) -> None:
         if self._cache:
