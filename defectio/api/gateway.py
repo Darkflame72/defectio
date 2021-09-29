@@ -40,11 +40,9 @@ class Gateway(gateway.Gateway):
             url = url + "?format=msgpack"
             self._send = self.send_msgpack
             self._read = self.read_msgpack
-        elif data_format == gateway.GatewayDataFormat.JSON:
+        else:
             self._send = self.send_json
             self._read = self._read
-        else:
-            raise NotImplementedError(f"Unsupported gateway data format: {data_format}")
         self._closing = asyncio.Event()
         self._closed = asyncio.Event()
         self._event_manager = event_manager
@@ -120,11 +118,11 @@ class Gateway(gateway.Gateway):
             )
 
     async def begin_typing(self, channel: objects.ObjectishOr[TextChannel]) -> None:
-        payload = {"type": "BeginTyping", "channel": channel}
+        payload = {"type": "BeginTyping", "channel": channel.id}
         await self._send(payload)
 
     async def stop_typing(self, channel: objects.ObjectishOr[TextChannel]) -> None:
-        payload = {"type": "StopTyping", "channel": channel}
+        payload = {"type": "StopTyping", "channel": channel.id}
         await self._send(payload)
 
     async def ping(self) -> None:
