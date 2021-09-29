@@ -1282,15 +1282,177 @@ class RESTClient(abc.ABC):
         """
 
     @abc.abstractmethod
-    async def fetch_bot(self) -> Optional[Bot]:
-        """Fetch bot.
+    async def fetch_bot(self, bot: objects.ObjectishOr[Bot]) -> Bot:
+        """Fetch a bot.
+
+        Parameters
+        ----------
+        bot : ObjectishOr[Bot]
+            Bot to fetch.
 
         Returns
         -------
-        Optional[Bot]
-            Bot.
+        Bot
+            Fetched bot.
         """
 
+    @abc.abstractmethod
+    async def edit_bot(
+        self,
+        bot: objects.ObjectishOr[Bot],
+        *,
+        name: Optional[str] = None,
+        public: Optional[bool] = None,
+        interactions_url: Optional[str] = None,
+        remove: Optional[Literal["InteractionsURL"]] = None,
+    ) -> None:
+        """Edit a bot.
 
-# TODO: Finish endpoints from edit bot down.
-# https://developers.revolt.chat/api/#tag/Bots/paths/~1bots~1:bot/patch
+        Parameters
+        ----------
+        bot : ObjectishOr[Bot]
+            Bot to edit.
+        name : Optional[str], optional
+            New name to use.
+        public : Optional[bool], optional
+            New public to use.
+        interactions_url : Optional[str], optional
+            New interactions URL to use.
+        remove : Optional[Literal["InteractionsURL"]], optional
+            Remove an interactions URL.
+        """
+
+    @abc.abstractmethod
+    async def delete_bot(self, bot: objects.ObjectishOr[Bot]) -> None:
+        """Delete a bot.
+
+        Parameters
+        ----------
+        bot : ObjectishOr[Bot]
+            Bot to delete.
+        """
+
+    @abc.abstractmethod
+    async def fetch_public_bot(
+        self, bot: objects.ObjectishOr[Union[Bot, PartialUser]]
+    ) -> PartialUser:
+        """Fetch a public bot.
+
+        Parameters
+        ----------
+        bot : ObjectishOr[Union[Bot, PartialUser]]
+            Bot to fetch.
+
+        Returns
+        -------
+        PartialUser
+            Fetched bot.
+        """
+
+    @abc.abstractmethod
+    async def invite_public_bot(
+        self, bot: objects.ObjectishOr[Bot], server: objects.ObjectishOr[Server]
+    ) -> None:
+        """Invite a public bot to a server.
+
+        Parameters
+        ----------
+        bot : ObjectishOr[Bot]
+            Bot to invite.
+        server : ObjectishOr[Server]
+            Server to invite the bot to.
+        """
+
+    @abc.abstractmethod
+    async def fetch_invite(self, invite: Union[Invite, str]) -> Invite:
+        """Fetch an invite.
+
+        Parameters
+        ----------
+        invite : Union[Invite, str]
+            Invite to fetch.
+
+        Returns
+        -------
+        Invite
+            Fetched invite.
+        """
+
+    # @abc.abstractmethod
+    # async def join_invite(self, invite: Union[Invite, str]) -> Server:
+    #     """Join an invite.
+
+    #     Parameters
+    #     ----------
+    #     invite : Union[Invite, str]
+    #         Invite to join.
+
+    #     Returns
+    #     -------
+    #     Server
+    #         Joined server.
+    #     """
+
+    @abc.abstractmethod
+    async def delete_invite(self, invite: Union[Invite, str]) -> None:
+        """Delete an invite.
+
+        Parameters
+        ----------
+        invite : Union[Invite, str]
+            Invite to delete.
+        """
+
+    @abc.abstractmethod
+    async def fetch_settings(self) -> dict[str, list[str]]:
+        """Fetch settings from server filtered by keys.
+
+        This will return an object with the requested keys, each value
+        is a tuple of (timestamp, value), the value is the previously
+        uploaded data.
+
+        Returns
+        -------
+        dict[str, list[str]]
+            Settings.
+        """
+
+    @abc.abstractmethod
+    async def set_settings(self, name: str, value: str) -> None:
+        """Set settings.
+
+        Parameters
+        ----------
+        name : str
+            Name to use.
+        value : str
+            Value to use.
+        """
+
+    @abc.abstractmethod
+    async def fetch_unreads(self) -> list[TextChannel]:
+        """Fetch unread channels.
+
+        Returns
+        -------
+        list[TextChannel]
+            Unread channels.
+        """
+
+    @abc.abstractmethod
+    async def subscribe_web_push(self, endpoint: str, p256dh: str, auth: str) -> None:
+        """Subscribe to web push.
+
+        Parameters
+        ----------
+        endpoint : str
+            Endpoint to use.
+        p256dh : str
+            P256DH to use.
+        auth : str
+            Auth to use.
+        """
+
+    @abc.abstractmethod
+    async def unsubscribe_web_push(self) -> None:
+        """Remove the Web Push subscription associated with the current session."""
