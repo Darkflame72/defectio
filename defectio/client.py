@@ -435,7 +435,7 @@ class Client:
         Optional[Channel]
             The requested channel. If not found, returns ``None``.
         """
-        channel = self._connection.http.get_channel(channel_id)
+        channel = await self._connection.http.get_channel(channel_id)
         if channel:
             channel = self._connection._add_channel_from_data(channel)
         return channel
@@ -456,7 +456,7 @@ class Client:
         Optional[Server]
             The requested server. If not found, returns ``None``.
         """
-        server = self._connection.http.get_server(server_id)
+        server = await self._connection.http.get_server(server_id)
         if server:
             server = self._connection._add_server_from_data(server)
         return server
@@ -477,7 +477,7 @@ class Client:
         Optional[User]
             The requested user. If not found, returns ``None``.
         """
-        user = self._connection.http.get_user(user_id)
+        user = await self._connection.http.get_user(user_id)
         if user:
             user = self._connection._add_user_from_data(user)
         return user

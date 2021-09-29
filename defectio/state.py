@@ -201,7 +201,6 @@ class ConnectionState:
             User object from the cache
         """
         return self._users.get(user_id)
-        return user
 
     async def fetch_user(self, user_id: str) -> Optional[User | ClientUser]:
         """Get user

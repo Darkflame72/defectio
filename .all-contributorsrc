@@ -15,7 +15,7 @@
       ]
     },
     {
-"login": "LimeProgramming",
+      "login": "LimeProgramming",
       "name": "Adam",
       "avatar_url": "https://avatars.githubusercontent.com/u/29736217?v=4",
       "profile": "https://github.com/LimeProgramming",
@@ -39,6 +39,24 @@
       "profile": "https://insrt.uk",
       "contributions": [
         "bug"
+      ]
+    },
+    {
+      "login": "Cearaj",
+      "name": "Cearaj",
+      "avatar_url": "https://avatars.githubusercontent.com/u/75398448?v=4",
+      "profile": "https://github.com/Cearaj",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jafreli",
+      "name": "jafreli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31709372?v=4",
+      "profile": "https://github.com/jafreli",
+      "contributions": [
+        "code"
       ]
     }
   ],

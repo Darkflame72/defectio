@@ -1,8 +1,8 @@
 # Defectio
 
-![revolt-api](https://img.shields.io/npm/v/revolt-api?label=Revolt%20API) [![Documentation Status](https://readthedocs.org/projects/defectio/badge/?version=latest)](https://defectio.readthedocs.io/en/latest/?badge=latest) [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+![revolt-api](https://img.shields.io/npm/v/revolt-api?label=Revolt%20API) [![Documentation Status](https://readthedocs.org/projects/defectio/badge/?version=latest)](https://defectio.readthedocs.io/en/latest/?badge=latest) [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg)](#contributors-)
 
-**defectio** is a direct implementation of the entire Revolt API and provides a way to authenticate and start communicating with Revolt servers. It is currently in active development so not all features are yet implemented. Similar interface to discord.py
+**defectio** is a direct implementation of the entire Revolt API and provides a way to authenticate and start communicating with Revolt servers. Similar interface to discord.py
 
 ## Example Usage
 
@@ -51,6 +51,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/LimeProgramming"><img src="https://avatars.githubusercontent.com/u/29736217?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Adam</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/commits?author=LimeProgramming" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/jottew"><img src="https://avatars.githubusercontent.com/u/71946106?v=4?s=100" width="100px;" alt=""/><br /><sub><b>jotte</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/commits?author=jottew" title="Code">💻</a></td>
     <td align="center"><a href="https://insrt.uk"><img src="https://avatars.githubusercontent.com/u/38285861?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Paul Makles</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/issues?q=author%3Ainsertish" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/Cearaj"><img src="https://avatars.githubusercontent.com/u/75398448?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Cearaj</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/commits?author=Cearaj" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/jafreli"><img src="https://avatars.githubusercontent.com/u/31709372?v=4?s=100" width="100px;" alt=""/><br /><sub><b>jafreli</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/commits?author=jafreli" title="Code">💻</a></td>
   </tr>
 </table>
 

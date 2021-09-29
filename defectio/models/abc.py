@@ -168,7 +168,7 @@ class Messageable(Protocol):
 
         channel = await self._get_channel()
         state = self._state
-        content = str(content) if content is not None else None
+        content = str(content) if content is not None else ""
 
         attachment_ids: list[str] = []
         if file is not None:

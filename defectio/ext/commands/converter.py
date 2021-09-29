@@ -118,7 +118,7 @@ class Converter(Protocol[T_co]):
         raise NotImplementedError("Derived classes need to implement this.")
 
 
-_ID_REGEX = re.compile(r"([0-9]{15,20})$")
+_ID_REGEX = re.compile(r"([0-9A-Z]{26})$")
 
 
 class IDConverter(Converter[T_co]):
@@ -158,7 +158,7 @@ class MemberConverter(IDConverter[defectio.Member]):
     async def convert(self, ctx: Context, argument: str) -> defectio.Member:
         bot = ctx.bot
         match = self._get_id_match(argument) or re.match(
-            r"<@!?([0-9]{15,20})>$", argument
+            r"<@!?([0-9A-Z]{26})>$", argument
         )
         server = ctx.server
         result = None
@@ -167,7 +167,7 @@ class MemberConverter(IDConverter[defectio.Member]):
             if server:
                 result = server.get_member_named(argument)
         else:
-            user_id = int(match.group(1))
+            user_id = match.group(1)
             if server:
                 result = server.get_member(user_id) or _utils_get(
                     ctx.message.mentions, id=user_id
@@ -205,16 +205,15 @@ class UserConverter(IDConverter[defectio.User]):
 
     async def convert(self, ctx: Context, argument: str) -> defectio.User:
         match = self._get_id_match(argument) or re.match(
-            r"<@!?([0-9]{15,20})>$", argument
+            r"<@!?([0-9A-Z]{26})>$", argument
         )
         result = None
         state = ctx._state
 
         if match is not None:
-            user_id = int(match.group(1))
-            result = ctx.bot.get_user(user_id) or _utils_get(
-                ctx.message.mentions, id=user_id
-            )
+            user_id = match.group(1)
+            result = ctx.bot.get_user(user_id)
+            
             if result is None:
                 try:
                     result = await ctx.bot.fetch_user(user_id)
@@ -273,7 +272,7 @@ class ServerChannelConverter(IDConverter[defectio.abc.ServerChannel]):
         bot = ctx.bot
 
         match = IDConverter._get_id_match(argument) or re.match(
-            r"<#([0-9]{15,20})>$", argument
+            r"<#([0-9A-Z]{26})>$", argument
         )
         result = None
         server = ctx.server
@@ -290,7 +289,7 @@ class ServerChannelConverter(IDConverter[defectio.abc.ServerChannel]):
 
                 result = defectio.utils.find(check, bot.get_all_channels())
         else:
-            channel_id = int(match.group(1))
+            channel_id = match.group(1)
             if server:
                 result = server.get_channel(channel_id)
             else:
@@ -373,7 +372,7 @@ class ServerConverter(IDConverter[defectio.Server]):
         result = None
 
         if match is not None:
-            server_id = int(match.group(1))
+            server_id = match.group(1)
             result = ctx.bot.get_server(server_id)
 
         if result is None:
@@ -417,10 +416,10 @@ class clean_content(Converter[str]):
 
     async def convert(self, ctx: Context, argument: str) -> str:
         msg = ctx.message
-
+        
         if ctx.server:
 
-            def resolve_member(id: int) -> str:
+            def resolve_member(id: str) -> str:
                 m = _utils_get(msg.mentions, id=id) or ctx.server.get_member(id)
                 return (
                     f"@{m.display_name if self.use_nicknames else m.name}"
@@ -428,28 +427,28 @@ class clean_content(Converter[str]):
                     else "@deleted-user"
                 )
 
-            def resolve_role(id: int) -> str:
+            def resolve_role(id: str) -> str:
                 r = _utils_get(msg.role_mentions, id=id) or ctx.server.get_role(id)
                 return f"@{r.name}" if r else "@deleted-role"
 
         else:
 
-            def resolve_member(id: int) -> str:
+            def resolve_member(id: str) -> str:
                 m = _utils_get(msg.mentions, id=id) or ctx.bot.get_user(id)
                 return f"@{m.name}" if m else "@deleted-user"
 
-            def resolve_role(id: int) -> str:
+            def resolve_role(id: str) -> str:
                 return "@deleted-role"
 
         if self.fix_channel_mentions and ctx.server:
 
-            def resolve_channel(id: int) -> str:
+            def resolve_channel(id: str) -> str:
                 c = ctx.server.get_channel(id)
                 return f"#{c.name}" if c else "#deleted-channel"
 
         else:
 
-            def resolve_channel(id: int) -> str:
+            def resolve_channel(id: str) -> str:
                 return f"<#{id}>"
 
         transforms = {
@@ -461,11 +460,11 @@ class clean_content(Converter[str]):
 
         def repl(match: re.Match) -> str:
             type = match[1]
-            id = int(match[2])
+            id = match[2]
             transformed = transforms[type](id)
             return transformed
 
-        result = re.sub(r"<(@[!&]?|#)([0-9]{15,20})>", repl, argument)
+        result = re.sub(r"<(@[!&]?|#)([0-9A-Z]{26})>", repl, argument)
         if self.escape_markdown:
             result = utils.escape_markdown(result)
         elif self.remove_markdown:
