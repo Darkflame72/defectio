@@ -6,16 +6,6 @@ from typing import Type
 from typing import TYPE_CHECKING
 from typing import TypedDict
 
-if TYPE_CHECKING:
-    from defectio.models.member import Member
-    from defectio.types.websocket import PartialUser
-    from defectio.models.message import Message
-
-    class Messages:
-        messages: list[Message]
-        users: Optional[list[PartialUser]]
-        members: Optional[list[Member]]
-
 
 RelationType = Literal[
     "Blocked", "BlockedOther", "Friend", "Incoming", "None", "Outgoing", "User"
@@ -23,6 +13,11 @@ RelationType = Literal[
 ChannelType = Literal[
     "SavedMessage", "DirectMessage", "Group", "TextChannel", "VoiceChannel"
 ]
+
+
+class AccountPayload(TypedDict):
+    _id: str
+    email: str
 
 
 class JoinVoice:

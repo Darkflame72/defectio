@@ -10,7 +10,6 @@ from . import abc
 if TYPE_CHECKING:
     from ..state import ConnectionState
     from ..types.payloads import MemberPayload
-    from .mixins import Hashable
     from defectio.types.websocket import ServerMemberUpdate
 
 

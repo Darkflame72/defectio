@@ -9,30 +9,28 @@ __all__ = ["EventManager"]
 
 import abc
 import asyncio
-
-if TYPE_CHECKING:
-    from defectio.types.websocket import (
-        ReadyPayload,
-        MessagePayload,
-        MessageDeletePayload,
-        MessageUpdatePayload,
-        ChannelUpdatePayload,
-        ChannelDeletePayload,
-        ChannelGroupJoinPayload,
-        ChannelGroupLeavePayload,
-        ChannelStopTypingPayload,
-        ChannelStartTypingPayload,
-        ChannelAckPayload,
-        ServerUpdatePayload,
-        ServerDeletePayload,
-        ServerMemberJoinPayload,
-        ServerMemberLeavePayload,
-        ServerMemberUpdatePayload,
-        ServerRoleUpdatePayload,
-        ServerRoleDeletePayload,
-        UserUpdatePayload,
-        UserRelationshipPayload,
-    )
+from defectio.types.websocket import (
+    ReadyPayload,
+    MessagePayload,
+    MessageDeletePayload,
+    MessageUpdatePayload,
+    ChannelUpdatePayload,
+    ChannelDeletePayload,
+    ChannelGroupJoinPayload,
+    ChannelGroupLeavePayload,
+    ChannelStopTypingPayload,
+    ChannelStartTypingPayload,
+    ChannelAckPayload,
+    ServerUpdatePayload,
+    ServerDeletePayload,
+    ServerMemberJoinPayload,
+    ServerMemberLeavePayload,
+    ServerMemberUpdatePayload,
+    ServerRoleUpdatePayload,
+    ServerRoleDeletePayload,
+    UserUpdatePayload,
+    UserRelationshipPayload,
+)
 
 
 class EventManager(abc.ABC):

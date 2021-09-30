@@ -68,6 +68,13 @@ If you're looking for something related to the project itself, it's here.
 
 .. toctree::
   :hidden:
+  :caption: Extending
+
+  extending
+  base/index
+
+.. toctree::
+  :hidden:
   :caption: Meta
 
   whats_new

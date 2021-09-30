@@ -2,10 +2,8 @@
 import abc
 import enum
 import typing
-
-if typing.TYPE_CHECKING:
-    from defectio.models import objects
-    from defectio.models.channel import TextChannel
+from defectio.models import objects
+from defectio.models.channel import TextChannel
 
 
 __all__ = ["Gateway", "GatewayDataFormat"]

@@ -16,7 +16,3 @@ from defectio.models.permission import *
 from defectio.models.server import *
 from defectio.models.user import *
 from defectio.models.raw_models import *
-
-__all__ = [
-    "abc",
-]

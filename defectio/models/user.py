@@ -11,7 +11,6 @@ from defectio.models.objects import Unique
 from .. import utils
 from .abc import Messageable
 from .attachment import Attachment
-from .mixins import Hashable
 
 if TYPE_CHECKING:
     from ..state import ConnectionState
@@ -29,8 +28,8 @@ __all__ = ("User", "ClientUser", "Status", "Relationship", "PartialUser", "BaseU
 BU = TypeVar("BU", bound="BaseUser")
 
 
-class Bot:
-    __slots__ = ("id", "owner", "token", "public", "interactions_url")
+class Bot(Unique):
+    __slots__ = ("owner", "token", "public", "interactions_url")
 
 
 class Status:
@@ -117,7 +116,7 @@ class UserBot:
         return None
 
 
-class PartialUser(Unique, Messageable):
+class PartialUser(Messageable):
     def __init__(
         self,
         id: str,

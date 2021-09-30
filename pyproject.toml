@@ -27,6 +27,10 @@ ulid-py = "^1.1.0"
 orjson = "^3.6.3"
 msgpack = "^1.0.2"
 aiofiles = "^0.7.0"
+aiodns = {version = "^3.0.0", extras = ["speedups"]}
+Brotli = {version = "^1.0.9", extras = ["speedups"]}
+cchardet = {version = "^2.1.7", extras = ["speedups"]}
+
 
 [tool.poetry.dev-dependencies]
 black = "^21.9b0"

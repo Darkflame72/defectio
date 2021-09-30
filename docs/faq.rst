@@ -4,8 +4,24 @@ Frequently Asked Questions
 This is a list of Frequently Asked Questions regarding using ``defectio`` and its extension modules. Feel free to suggest a
 new question or submit one via pull requests.
 
+General
+---------
+
+General questions around the library belong here.
+
+Where can I find usage examples?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Example code can be found in the `examples folder <https://github.com/Darkflame72/defectio/tree/main/examples>`_
+in the repository.
+
+Why is it called ``defectio``?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Defectio is latin for "Revolt" and I personally thought it sounded nice.
+
 Coroutines
-------------
+----------
 
 Questions regarding coroutines and asyncio belong here.
 
@@ -61,14 +77,3 @@ Consider the following example: ::
             if r.status == 200:
                 js = await r.json()
                 await channel.send(js['file'])
-
-General
----------
-
-General questions regarding library usage belong here.
-
-Where can I find usage examples?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Example code can be found in the `examples folder <https://github.com/Darkflame72/defectio/tree/main/examples>`_
-in the repository.

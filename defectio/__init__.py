@@ -22,7 +22,8 @@ from typing import NamedTuple, Literal
 
 # expose all models at the top level
 from defectio.models import *
-from defectio.api.bot import Client
+
+# from defectio.api.bot import Client
 
 __all__ = (
     "__title__",

@@ -1,45 +1,47 @@
 """Provides an interface for REST API implementations to follow."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import io
+from defectio.models.apiinfo import ApiInfo
+from defectio.types.payloads import AccountPayload, LoginPayload
+from defectio.models.user import ClientUser
+from defectio.models.message import Message
+from defectio.models.attachment import Attachment
+from defectio.models.permission import ChannelPermission
+from defectio.models.server import Role, Server, Colour
+from typing import Union
+from typing import Literal
+from typing import Optional
+from defectio.models.member import Member
+from defectio.models.permission import Permission
+from defectio.models.server import Ban
+from defectio.models.server import Category
+from defectio.models.server import SystemMessages
+from defectio.models.user import Bot
+from defectio.models.channel import (
+    DMChannel,
+    DMChannel,
+    GroupChannel,
+    Invite,
+    PartialChannel,
+    ServerChannel,
+    TextChannel,
+    VoiceChannel,
+)
+from defectio.models import objects
+from defectio.models.user import PartialUser, Profile, Relationship, Status
+from defectio.types.payloads import (
+    JoinVoice,
+    RelationType,
+    SessionPayload,
+)
 
-if TYPE_CHECKING:
-    import io
-    from defectio.models.apiinfo import ApiInfo
-    from defectio.types.payloads import AccountPayload, LoginPayload
-    from defectio.models.user import ClientUser
-    from defectio.models.message import Message
-    from defectio.models.attachment import Attachment
-    from defectio.models.permission import ChannelPermission
-    from defectio.models.server import Role, Server, Colour
-    from typing import Union
-    from typing import Literal
-    from typing import Optional
-    from defectio.models.member import Member
-    from defectio.models.permission import Permission
-    from defectio.models.server import Ban
-    from defectio.models.server import Category
-    from defectio.models.server import SystemMessages
-    from defectio.models.user import Bot
-    from defectio.state import Channel
-    from defectio.models.channel import (
-        DMChannel,
-        DMChannel,
-        GroupChannel,
-        Invite,
-        PartialChannel,
-        ServerChannel,
-        TextChannel,
-        VoiceChannel,
-    )
-    from defectio.models import objects
-    from defectio.models.user import PartialUser, Profile, Relationship, Status
-    from defectio.types.payloads import (
-        JoinVoice,
-        Messages,
-        RelationType,
-        SessionPayload,
-    )
+
+class Messages:
+    messages: list[Message]
+    users: Optional[list[PartialUser]]
+    members: Optional[list[Member]]
+
 
 __all__ = ["RESTClient"]
 
@@ -247,12 +249,12 @@ class RESTClient(abc.ABC):
         """Delete the session."""
 
     @abc.abstractmethod
-    async def fetch_sessions(self) -> List[SessionPayload]:
+    async def fetch_sessions(self) -> list[SessionPayload]:
         """Fetch all existing sessions.
 
         Returns
         -------
-        List[SessionPayload]
+        list[SessionPayload]
             List of session information.
         """
 
@@ -476,7 +478,7 @@ class RESTClient(abc.ABC):
     @abc.abstractmethod
     async def fetch_channel(
         self, channel: objects.ObjectishOr[PartialChannel]
-    ) -> Channel:
+    ) -> PartialChannel:
         """Retrieve a channel.
 
         Parameters
@@ -717,6 +719,7 @@ class RESTClient(abc.ABC):
             Channel to poll for changes.
         messages : list[ObjectishOr[Message]]
             Messages to poll for changes.
+
             .. note
                 maximum of 150 messages
 

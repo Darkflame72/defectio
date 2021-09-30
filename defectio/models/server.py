@@ -7,7 +7,6 @@ from defectio.models.colour import Colour
 from defectio.models.permission import ChannelPermission
 from defectio.models.permission import ServerPermission
 
-from .mixins import Hashable
 from .objects import Unique
 
 if TYPE_CHECKING:
@@ -131,7 +130,7 @@ class Role(Unique):
         return f"<Role server={self.server.id} name={self.name} colour={self.colour}>"
 
 
-class Category(Hashable):
+class Category(Unique):
     def __init__(self, data: CategoryPayload, state: ConnectionState) -> None:
         self._state = state
         self.channels: list[MessageableChannel] = []

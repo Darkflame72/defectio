@@ -4,20 +4,20 @@ from typing import Sequence
 from typing import TYPE_CHECKING
 
 from defectio.models.member import Member
-from defectio.models.objects import ObjectishOr
 from defectio.models.server import Role
 
-if TYPE_CHECKING:
-    from defectio.models import (
-        Server,
-        ServerChannel,
-        ClientUser,
-        objects,
-        Message,
-        PartialUser,
-        User,
-        DirectMessage,
-    )
+from defectio.models import (
+    Server,
+    ServerChannel,
+    ClientUser,
+    objects,
+    Message,
+    PartialUser,
+    User,
+    DirectMessage,
+)
+from defectio.models import objects
+
 
 __all__ = ["Cache", "MutableCache"]
 
@@ -79,13 +79,13 @@ class Cache(abc.ABC):
 
     @abc.abstractmethod
     def get_server_channel(
-        self, channel: ObjectishOr[ServerChannel]
+        self, channel: objects.ObjectishOr[ServerChannel]
     ) -> Optional[ServerChannel]:
         """Get a Server Channel from the cache.
 
         Parameters
         ----------
-        channel : ObjectishOr[ServerChannel]
+        channel : objects.ObjectishOr[ServerChannel]
             Channel to get.
 
         Returns

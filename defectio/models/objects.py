@@ -35,7 +35,7 @@ class Object(str):
         return epoch.datetime
 
 
-class Unique(abc.ABC):
+class Unique(typing.Protocol):
     """Mixin for a class that enforces uniqueness by a object ID."""
 
     __slots__: typing.Sequence[str] = "id"

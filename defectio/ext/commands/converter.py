@@ -213,7 +213,7 @@ class UserConverter(IDConverter[defectio.User]):
         if match is not None:
             user_id = match.group(1)
             result = ctx.bot.get_user(user_id)
-            
+
             if result is None:
                 try:
                     result = await ctx.bot.fetch_user(user_id)
@@ -416,7 +416,7 @@ class clean_content(Converter[str]):
 
     async def convert(self, ctx: Context, argument: str) -> str:
         msg = ctx.message
-        
+
         if ctx.server:
 
             def resolve_member(id: str) -> str:

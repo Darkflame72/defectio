@@ -10,7 +10,6 @@ from defectio.models.objects import Unique
 from defectio.models.user import PartialUser
 
 from .abc import Messageable
-from .mixins import Hashable
 
 
 if TYPE_CHECKING:

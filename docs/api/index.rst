@@ -15,7 +15,6 @@ The following section outlines the API of defectio.
   :maxdepth: 1
 
   version
-  client
   events
   utility
   async_iter
