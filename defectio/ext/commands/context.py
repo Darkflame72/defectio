@@ -24,14 +24,19 @@ from __future__ import annotations
 
 import inspect
 import re
+from typing import Any
+from typing import Dict
+from typing import Generic
+from typing import List
+from typing import Optional
+from typing import TYPE_CHECKING
+from typing import TypeVar
+from typing import Union
 
-from typing import Any, Dict, Generic, List, Optional, TYPE_CHECKING, TypeVar, Union
-
-import defectio
 import defectio.utils
-from . import utils
-
 from defectio import Message
+
+from . import utils
 
 if TYPE_CHECKING:
     from typing_extensions import ParamSpec
@@ -144,16 +149,9 @@ class Context(defectio.abc.Messageable, Generic[BotT]):
         self.command_failed: bool = command_failed
         self.current_parameter: Optional[inspect.Parameter] = current_parameter
         self._state: ConnectionState = self.message._state
-        
-    async def reply(
-        self,
-        content: str = None,
-        **kwargs: Any
-    ) -> Message:
-        return await self.message.reply(
-            content,
-            **kwargs
-        )
+
+    async def reply(self, content: str = None, **kwargs: Any) -> Message:
+        return await self.message.reply(content, **kwargs)
 
     async def invoke(
         self, command: Command[CogT, P, T], /, *args: P.args, **kwargs: P.kwargs

@@ -3,12 +3,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..types.payloads import ApiInfoPayload, ApiInfoFeaturePayload
+    from defectio.types.payloads import ApiInfoPayload, ApiInfoFeaturePayload
 
-__all__ = ("ApiInfo", "ApiFeatures", "ApiUrl")
+__all__ = ["ApiInfo", "ApiFeatures", "ApiUrl"]
 
 
 class ApiUrl:
+    __slots__ = ("enabled", "url")
+
     def __init__(self, data: ApiInfoFeaturePayload):
         self.enabled = data.get("enabled", False)
         self.url = data.get("url", "")
@@ -21,6 +23,8 @@ class ApiUrl:
 
 
 class ApiFeatures:
+    __slots__ = ("captcha", "email", "invite_only", "autumn", "january", "voso")
+
     def __init__(self, data: ApiInfoFeaturePayload) -> None:
         self.captcha = data.get("captcha")
         self.email = data.get("email")
@@ -37,6 +41,8 @@ class ApiFeatures:
 
 
 class ApiInfo:
+    __slots__ = ("revolt_version", "features", "ws_url", "app_url", "vapid_url")
+
     def __init__(self, data: ApiInfoPayload):
         self.revolt_version = data.get("revolt")
         self.features = ApiFeatures(data.get("features"))

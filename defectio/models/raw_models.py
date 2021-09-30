@@ -9,7 +9,6 @@ if TYPE_CHECKING:
 
 __all__ = (
     "RawMessageDeleteEvent",
-    "RawBulkMessageDeleteEvent",
     "RawMessageUpdateEvent",
 )
 

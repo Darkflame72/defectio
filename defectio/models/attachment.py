@@ -2,41 +2,25 @@ from __future__ import annotations
 
 import io
 import os
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 from typing import Optional
+from typing import TYPE_CHECKING
 from typing import Union
 
-from defectio.models.mixins import Hashable
-from ..errors import DefectioException
+from defectio.models.objects import Object, Unique
 
 if TYPE_CHECKING:
-    from ..state import ConnectionState
-    from ..types.payloads import AttachmentPayload
+    from defectio.state import ConnectionState
+    from defectio.types.payloads import AttachmentPayload
+
+__all__ = ["Attachment"]
 
 
-class AutumnID(Hashable):
-    """
-    Attributes
-    ------------
-    id: :class:`int`
-        The atumn file ID.
-    """
-
-    __slots__ = "id"
-
-    def __init__(self, *, data):
-        self.id: str = data["id"]
-
-    def __str__(self) -> str:
-        return self.id or ""
-
-
-class Attachment(Hashable):
-    url: str
-    _state: Optional[ConnectionState]
+class Attachment(Unique):
+    __slots__ = ("tag", "filename", "width", "height", "content_type", "size", "_state")
 
     def __init__(self, *, data: AttachmentPayload, state: ConnectionState):
-        self.id: int = data["_id"]
+        self.id = Object(data["_id"])
         self.tag: Literal["attachments"] = data["tag"]
         self.filename: str = data["filename"]
         self.width: Optional[int] = data["metadata"].get("width")
@@ -47,14 +31,14 @@ class Attachment(Hashable):
 
     @property
     def url(self) -> str:
-        """:class:`str`: URL of the attachment"""
+        """URL of the attachment"""
         base_url = self._state.api_info.features.autumn["url"]
 
         return f"{base_url}/{self.tag}/{self.id}"
 
     @property
     def is_spoiler(self) -> bool:
-        """:class:`bool`: Whether this attachment contains a spoiler."""
+        """Whether this attachment contains a spoiler."""
         return self.filename.startswith("SPOILER_")
 
     def __repr__(self) -> str:
@@ -64,13 +48,22 @@ class Attachment(Hashable):
         return self.url or ""
 
     def to_dict(self) -> dict:
+        """Convert the content to a dict.
+
+        Used when sending the raw data to the api.
+
+        Returns
+        -------
+        dict
+            Raw data to send to the api.
+        """
         result: dict = {
             "filename": self.filename,
             "id": self.id,
             "tag": self.tag,
             "size": self.size,
             "url": self.url,
-            "spoiler": self.is_spoiler(),
+            "spoiler": self.is_spoiler,
         }
         if self.width:
             result["width"] = self.width
@@ -87,8 +80,6 @@ class Attachment(Hashable):
 
         Raises
         ------
-        DefectioException
-            There was no internal connection state.
         HTTPException
             Downloading the asset failed.
         NotFound
@@ -99,8 +90,6 @@ class Attachment(Hashable):
         :class:`bytes`
             The content of the asset.
         """
-        if self._state is None:
-            raise DefectioException("Invalid state (no ConnectionState provided)")
 
         return await self._state.http.get_from_cdn(self.url)
 

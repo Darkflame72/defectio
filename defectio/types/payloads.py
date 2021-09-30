@@ -3,7 +3,9 @@ from typing import Literal
 from typing import Optional
 from typing import Tuple
 from typing import Type
+from typing import TYPE_CHECKING
 from typing import TypedDict
+
 
 RelationType = Literal[
     "Blocked", "BlockedOther", "Friend", "Incoming", "None", "Outgoing", "User"
@@ -11,6 +13,23 @@ RelationType = Literal[
 ChannelType = Literal[
     "SavedMessage", "DirectMessage", "Group", "TextChannel", "VoiceChannel"
 ]
+
+
+class AccountPayload(TypedDict):
+    _id: str
+    email: str
+
+
+class JoinVoice:
+    token: str
+
+
+class LoginPayload(TypedDict):
+    _id: str
+    user_id: str
+    token: str
+    name: str
+    subscription: str
 
 
 class ApiInfoFeaturePayload(TypedDict):
@@ -31,7 +50,7 @@ class ApiInfoPayload(TypedDict):
 
 
 class SessionPayload(TypedDict):
-    id: str
+    _id: str
     friendly_name: str
 
 
@@ -199,7 +218,7 @@ JoinCall = TypedDict("JoinCall", {"token": str})
 
 
 class CategoryPayload(TypedDict):
-    id: str
+    _id: str
     title: str
     channels: list[str]
 
@@ -274,7 +293,7 @@ class BansPayload(TypedDict):
 
 
 class CreateRole(Type):
-    id: str
+    _id: str
     permissions: list[int]
 
 

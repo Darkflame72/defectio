@@ -11,7 +11,7 @@ from .payloads import ServerPayload
 from .payloads import UserPayload
 
 
-class Error(TypedDict):
+class ErrorPayload(TypedDict):
     type: Literal[
         "LabelMe",
         "InternalError",
@@ -22,163 +22,163 @@ class Error(TypedDict):
     error: str
 
 
-class Authenticated(TypedDict):
+class AuthenticatedPayload(TypedDict):
     type: Literal["Authenticated"]
 
 
-class Pong(TypedDict):
+class PongPayload(TypedDict):
     type: Literal["Pong"]
     time: int
 
 
-class Ready(TypedDict):
+class ReadyPayload(TypedDict):
     type: Literal["Ready"]
     users: list[UserPayload]
     servers: list[ServerPayload]
     channels: list[ChannelPayload]
 
 
-class Message(MessagePayload):
+class MessagePayload(MessagePayload):
     type: Literal["Message"]
 
 
-class PartialMessage(MessagePayload, total=False):
+class PartialMessagePayload(MessagePayload, total=False):
     pass
 
 
-class MessageUpdate(TypedDict):
+class MessageUpdatePayload(TypedDict):
     type: Literal["MessageUpdate"]
     id: str
-    data: PartialMessage
+    data: PartialMessagePayload
 
 
-class MessageDelete(TypedDict):
+class MessageDeletePayload(TypedDict):
     type: Literal["MessageDelete"]
     id: str
     channel: str
 
 
-class ChannelCreate(ChannelPayload):
+class ChannelCreatePayload(ChannelPayload):
     type: Literal["ChannelCreate"]
 
 
-class PartialChannel(ChannelPayload, total=False):
+class PartialChannelPayload(ChannelPayload, total=False):
     pass
 
 
-class ChannelUpdate(TypedDict):
+class ChannelUpdatePayload(TypedDict):
     type: Literal["ChannelUpdate"]
     id: str
-    data: PartialChannel
+    data: PartialChannelPayload
     clear: Optional[Literal["Icon", "Description"]]
 
 
-class ChannelDelete(TypedDict):
+class ChannelDeletePayload(TypedDict):
     type: Literal["ChannelDelete"]
     id: str
 
 
-class ChannelGroupJoin(TypedDict):
+class ChannelGroupJoinPayload(TypedDict):
     type: Literal["ChannelGroupJoin"]
     id: str
     user: str
 
 
-class ChannelGroupLeave(TypedDict):
+class ChannelGroupLeavePayload(TypedDict):
     type: Literal["ChannelGroupLeave"]
     id: str
     user: str
 
 
-class ChannelStartTyping(TypedDict):
+class ChannelStartTypingPayload(TypedDict):
     type: Literal["ChannelStartTyping"]
     id: str
     user: str
 
 
-class ChannelStopTyping(TypedDict):
+class ChannelStopTypingPayload(TypedDict):
     type: Literal["ChannelStopTyping"]
     id: str
     user: str
 
 
-class ChannelAck(TypedDict):
+class ChannelAckPayload(TypedDict):
     type: Literal["ChannelAck"]
     id: str
     user: str
     message_id: str
 
 
-class PartialServer(ServerPayload, total=False):
+class PartialServerPayload(ServerPayload, total=False):
     pass
 
 
-class ServerUpdate(TypedDict):
+class ServerUpdatePayload(TypedDict):
     type: Literal["ServerUpdate"]
     id: str
-    data: PartialServer
+    data: PartialServerPayload
     clear: Optional[Literal["Icon", "Description", "Bannerss"]]
 
 
-class ServerDelete(TypedDict):
+class ServerDeletePayload(TypedDict):
     type: Literal["ServerDelete"]
     id: str
 
 
-class PartialServerMember(MemberPayload, total=False):
+class PartialServerMemberPayload(MemberPayload, total=False):
     pass
 
 
-class ServerMemberUpdate(TypedDict):
+class ServerMemberUpdatePayload(TypedDict):
     type: Literal["ServerMemberUpdate"]
     id: str
-    data: PartialServerMember
+    data: PartialServerMemberPayload
     clear: Optional[Literal["Nickname", "Avatar"]]
 
 
-class ServerMemberJoin(TypedDict):
+class ServerMemberJoinPayload(TypedDict):
     type: Literal["ServerMemberJoin"]
     id: str
     user: str
 
 
-class ServerMemberLeave(TypedDict):
+class ServerMemberLeavePayload(TypedDict):
     type: Literal["ServerMemberLeave"]
     id: str
     user: str
 
 
-class PartialServerRole(RolePayload, total=False):
+class PartialServerRolePayload(RolePayload, total=False):
     pass
 
 
-class ServerRoleUpdate(TypedDict):
+class ServerRoleUpdatePayload(TypedDict):
     type: Literal["ServerRoleUpdate"]
     id: str
-    data: PartialServerRole
+    data: PartialServerRolePayload
     clear: Optional[Literal["Colour"]]
 
 
-class ServerRoleDelete(TypedDict):
+class ServerRoleDeletePayload(TypedDict):
     type: Literal["ServerRoleDelete"]
     id: str
     role_id: str
 
 
-class PartialUser(UserPayload, total=False):
+class PartialUserPayload(UserPayload, total=False):
     pass
 
 
-class UserUpdate(TypedDict):
+class UserUpdatePayload(TypedDict):
     type: Literal["UserUpdate"]
     id: str
-    data: PartialUser
+    data: PartialUserPayload
     clear: Optional[
         Literal["ProfileContent", "ProfileBackground", "StatusText", "Avatar"]
     ]
 
 
-class UserRelationship(TypedDict):
+class UserRelationshipPayload(TypedDict):
     type: Literal["UserRelationship"]
     id: str
     user: str

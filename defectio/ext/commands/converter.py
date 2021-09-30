@@ -22,27 +22,26 @@ DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
 
-import re
 import inspect
-from typing import (
-    Any,
-    Dict,
-    Generic,
-    Iterable,
-    Literal,
-    Optional,
-    TYPE_CHECKING,
-    List,
-    Protocol,
-    Type,
-    TypeVar,
-    Tuple,
-    Union,
-    runtime_checkable,
-)
-from . import utils
+import re
+from typing import Any
+from typing import Dict
+from typing import Generic
+from typing import Iterable
+from typing import List
+from typing import Literal
+from typing import Optional
+from typing import Protocol
+from typing import runtime_checkable
+from typing import Tuple
+from typing import Type
+from typing import TYPE_CHECKING
+from typing import TypeVar
+from typing import Union
 
 import defectio
+
+from . import utils
 from .errors import *
 
 if TYPE_CHECKING:
@@ -214,7 +213,7 @@ class UserConverter(IDConverter[defectio.User]):
         if match is not None:
             user_id = match.group(1)
             result = ctx.bot.get_user(user_id)
-            
+
             if result is None:
                 try:
                     result = await ctx.bot.fetch_user(user_id)
@@ -417,7 +416,7 @@ class clean_content(Converter[str]):
 
     async def convert(self, ctx: Context, argument: str) -> str:
         msg = ctx.message
-        
+
         if ctx.server:
 
             def resolve_member(id: str) -> str:

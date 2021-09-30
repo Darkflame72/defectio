@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "defectio"
-version = "0.2.1a"
+version = "0.3.0"
 description = "Wrapper for Revolt API"
 authors = ["Leon Bowie <leon@bowie-co.nz>"]
 license = "MIT"
@@ -9,7 +9,6 @@ homepage = "https://github.com/Darkflame72/defectio"
 readme = "README.md"
 repository = "https://github.com/Darkflame72/defectio"
 classifiers = [
-  "Development Status :: 3 - Alpha",
   "Natural Language :: English",
   "Framework :: AsyncIO",
   "Operating System :: OS Independent",
@@ -17,7 +16,9 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Utilities",
   "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
 ]
+include = ["defectio/py.typed"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -26,6 +27,10 @@ ulid-py = "^1.1.0"
 orjson = "^3.6.3"
 msgpack = "^1.0.2"
 aiofiles = "^0.7.0"
+aiodns = {version = "^3.0.0", extras = ["speedups"]}
+Brotli = {version = "^1.0.9", extras = ["speedups"]}
+cchardet = {version = "^2.1.7", extras = ["speedups"]}
+
 
 [tool.poetry.dev-dependencies]
 black = "^21.9b0"

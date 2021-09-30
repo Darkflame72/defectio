@@ -22,21 +22,27 @@ DEALINGS IN THE SOFTWARE.
 """
 import collections
 import datetime
+import re
+import sys
+import unicodedata
+from inspect import isawaitable as _isawaitable
+from inspect import signature as _signature
+from operator import attrgetter
 from typing import Any
 from typing import AsyncIterator
 from typing import Callable
+from typing import ForwardRef
 from typing import Generic
 from typing import Iterable
 from typing import Iterator
+from typing import Literal
+from typing import Mapping
 from typing import Optional
+from typing import Protocol
 from typing import Sequence
-from inspect import signature as _signature, isawaitable as _isawaitable
+from typing import TYPE_CHECKING
 from typing import TypeVar
-from typing import Union, Protocol, TYPE_CHECKING, Mapping, ForwardRef, Literal
-from operator import attrgetter
-import sys
-import re
-import unicodedata
+from typing import Union
 
 PY_310 = sys.version_info >= (3, 10)
 
@@ -68,6 +74,7 @@ def flatten_literal_params(parameters: Iterable[Any]) -> tuple[Any, ...]:
 def normalise_optional_params(parameters: Iterable[Any]) -> tuple[Any, ...]:
     none_cls = type(None)
     return tuple(p for p in parameters if p is not none_cls) + (none_cls,)
+
 
 async def async_all(gen, *, check=_isawaitable):
     for elem in gen:

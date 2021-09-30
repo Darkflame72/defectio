@@ -22,37 +22,34 @@ DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
 
-
 import asyncio
-import collections
 import collections.abc
-import inspect
 import importlib.util
+import inspect
 import sys
 import traceback
 import types
-from typing import (
-    Any,
-    Callable,
-    Mapping,
-    List,
-    Dict,
-    TYPE_CHECKING,
-    Optional,
-    TypeVar,
-    Type,
-    Union,
-)
+from typing import Any
+from typing import Callable
+from typing import Dict
+from typing import List
+from typing import Mapping
+from typing import Optional
+from typing import Type
+from typing import TYPE_CHECKING
+from typing import TypeVar
+from typing import Union
 
 import defectio
 
-from .core import GroupMixin
-from .view import StringView
-from .context import Context
 from . import errors
-from .help import HelpCommand, DefaultHelpCommand
-from .cog import Cog
 from . import utils
+from .cog import Cog
+from .context import Context
+from .core import GroupMixin
+from .help import DefaultHelpCommand
+from .help import HelpCommand
+from .view import StringView
 
 if TYPE_CHECKING:
     import importlib.machinery

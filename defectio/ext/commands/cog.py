@@ -23,20 +23,17 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 
 import inspect
-
-from typing import (
-    Any,
-    Callable,
-    ClassVar,
-    Dict,
-    Generator,
-    List,
-    Optional,
-    TYPE_CHECKING,
-    Tuple,
-    TypeVar,
-    Type,
-)
+from typing import Any
+from typing import Callable
+from typing import ClassVar
+from typing import Dict
+from typing import Generator
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Type
+from typing import TYPE_CHECKING
+from typing import TypeVar
 
 from ._types import _BaseCommand
 

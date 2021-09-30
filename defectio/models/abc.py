@@ -1,48 +1,29 @@
 from __future__ import annotations
-from defectio.types.payloads import ChannelPayload
-from defectio.models.server import Category
 
 from typing import Any
 from typing import Optional
-from typing import Protocol
 from typing import runtime_checkable
 from typing import TYPE_CHECKING
 from typing import Union
 
+from defectio.models.server import Category
+from defectio.types.payloads import ChannelPayload
+from defectio.models.objects import Unique
+
 if TYPE_CHECKING:
-    from ..state import ConnectionState
-    from .server import Server
-    from .message import Message, Reply
-    from ..types.payloads import ChannelType
-    from .channel import DMChannel, TextChannel, GroupChannel
+    from defectio.state import ConnectionState
+    from defectio.models.server import Server
+    from defectio.models.message import Message, Reply
+    from defectio.types.payloads import ChannelType
+    from defectio.models.channel import DMChannel, TextChannel, GroupChannel
     from defectio.models.message import File
-    from .user import ClientUser
+    from defectio.models.user import ClientUser
 
     PartialMessageableChannel = Union[TextChannel, DMChannel]
     MessageableChannel = Union[PartialMessageableChannel, GroupChannel]
 
 
-class DefectioBase(Protocol):
-    """An ABC that details the common operations on a Defectio model.
-
-    Almost all :ref:`Defectio models <defectoi_api_models>` meet this
-    abstract base class.
-
-    If you want to create a defectiobase on your own, consider using
-    :class:`.Object`.
-
-    Attributes
-    -----------
-    id: :class:`int`
-        The model's unique ID.
-    """
-
-    __slots__ = ()
-    id: int
-
-
-@runtime_checkable
-class User(DefectioBase, Protocol):
+class User(Unique):
     """An ABC that details the common operations on a Revolt user.
 
     The following implement this ABC:
@@ -75,8 +56,7 @@ class User(DefectioBase, Protocol):
         raise NotImplementedError
 
 
-@runtime_checkable
-class PrivateChannel(DefectioBase, Protocol):
+class PrivateChannel(Unique):
     """An ABC that details the common operations on a private Discord channel.
 
     The following implement this ABC:
@@ -84,7 +64,7 @@ class PrivateChannel(DefectioBase, Protocol):
     - :class:`~defectio.DMChannel`
     - :class:`~defectio.GroupChannel`
 
-    This ABC must also implement :class:`~defectio.abc.DefectioBase`.
+    This ABC must also implement :class:`~defectio.abc.Unique`.
 
     Attributes
     -----------
@@ -136,7 +116,7 @@ class ServerChannel:
         return self.server.get_category_channel(self.id)
 
 
-class Messageable(Protocol):
+class Messageable(Unique):
     """An ABC that details the common operations on a model that can send messages.
 
     The following implement this ABC:
@@ -178,15 +158,11 @@ class Messageable(Protocol):
                     file=attachment, tag="attachments"
                 )
                 attachment_ids.append(attach["id"])
-        
+
         replies = [{"id": r.message.id, "mention": r.mention} for r in replies]
         data = await state.http.send_message(
-            channel.id,
-            content=content,
-            attachments=attachment_ids,
-            replies=replies
+            channel.id, content=content, attachments=attachment_ids, replies=replies
         )
-
 
         new_message = state.create_message(channel=channel, data=data)
         if delete_after is not None:

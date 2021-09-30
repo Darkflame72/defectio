@@ -1,37 +1,51 @@
 from __future__ import annotations
-from defectio.models.permission import ChannelPermission
-from defectio.models.server import Role
 
 from typing import Optional
 from typing import TYPE_CHECKING
 from typing import Union
 
-from .user import User
+from defectio.models.objects import Object, Unique
+from defectio.models.permission import ChannelPermission
+from defectio.models.server import Role
 
 from . import abc
-from .mixins import Hashable
+from .user import User
 
 if TYPE_CHECKING:
     from ..types.payloads import ChannelPayload
-    from ..state import ConnectionState
-    from .server import Server
-    from ..types.payloads import DMChannelPayload
-    from .message import Message
+    from defectio.state import ConnectionState
+    from defectio.models.server import Server
+    from defectio.types.payloads import DMChannelPayload, EditChannelPayload
 
 __all__ = (
     "TextChannel",
     "VoiceChannel",
     "DMChannel",
     "GroupChannel",
+    "PartialChannel",
+    "channel_factory",
+    "MessageableChannel",
+    "ServerChannel",
+    "DirectMessage",
 )
 
 
-class TextChannel(abc.Messageable, abc.ServerChannel, Hashable):
+class PartialChannel(Unique):
+    pass
+
+
+class Invite:
+    __slots__ = "code"
+
+    def __init__(self, code: str):
+        self.code = code
+
+
+class TextChannel(abc.Messageable, abc.ServerChannel, PartialChannel):
     __slots__ = (
         "name",
         "description",
         "_state",
-        "id",
         "type",
         "server",
         "nsfw",
@@ -40,7 +54,7 @@ class TextChannel(abc.Messageable, abc.ServerChannel, Hashable):
 
     def __init__(self, *, state: ConnectionState, server: Server, data: ChannelPayload):
         self._state: ConnectionState = state
-        self.id: str = data["_id"]
+        self.id: Object = Object(data["_id"])
         self.type: str = data["channel_type"]
         self.server = server
         self.name = data["name"]
@@ -72,17 +86,19 @@ class TextChannel(abc.Messageable, abc.ServerChannel, Hashable):
         return self
 
 
-class SavedMessageChannel(abc.Messageable):
+class SavedMessageChannel(abc.Messageable, PartialChannel):
     def __init__(self, data: ChannelPayload, state: ConnectionState):
-        self.id = data.get("_id")
+        self.id: Object = Object(data.get("_id"))
         self._state: ConnectionState = state
-        super().__init__(data, state)
 
     async def _get_channel(self) -> SavedMessageChannel:
         return self
 
 
-class DMChannel(abc.Messageable):
+class DMChannel(abc.Messageable, PartialChannel):
+
+    __slots__ = ("id", "active", "_recipients")
+
     def __init__(self, data: DMChannelPayload, state: ConnectionState):
         self._state = state
         self.id = data.get("_id")
@@ -92,6 +108,9 @@ class DMChannel(abc.Messageable):
         # else:
         #     self.last_message = None
         self._recipients = data.get("recipients")
+
+    def _update(self, data: EditChannelPayload) -> None:
+        pass
 
     async def _get_channel(self) -> DMChannel:
         return self
@@ -109,7 +128,7 @@ class DMChannel(abc.Messageable):
         return f"<DMChannel id={self.id} recipient={self.recipient!r}>"
 
 
-class GroupChannel(abc.Messageable):
+class GroupChannel(abc.Messageable, PartialChannel):
     def __init__(self, data: ChannelPayload, state: ConnectionState):
         super().__init__(data, state)
         self.id = data.get("_id")
@@ -118,7 +137,7 @@ class GroupChannel(abc.Messageable):
         self._recipients = data.get("recipients")
         self._state: ConnectionState = state
 
-    def _update(self, data: ChannelPayload) -> None:
+    def _update(self, data: EditChannelPayload) -> None:
         self.name = data.get("name", self.name)
         self.active = data.get("active", self.active)
         self._recipients = data.get("recipients", self._recipients)
@@ -132,10 +151,10 @@ class GroupChannel(abc.Messageable):
         return [self._state.get_user(user) for user in self._recipients]
 
 
-class VoiceChannel(abc.Messageable):
+class VoiceChannel(abc.Messageable, PartialChannel):
     def __init__(self, state: ConnectionState, server: Server, data):
         self._state: ConnectionState = state
-        self.id: str = data["_id"]
+        self.id: Object = Object(data["_id"])
         self._type: str = data["channel_type"]
         self.server = server
         self.name: str = data["name"]
@@ -144,7 +163,7 @@ class VoiceChannel(abc.Messageable):
         for role_id, perm in data.get("role_permissions", {}).items():
             self.overrides.append({role_id: ChannelPermission(perm)})
 
-    def _update(self, data) -> None:
+    def _update(self, data: EditChannelPayload) -> None:
         self.name: str = data.get("name", self.name)
         self.description: Optional[str] = data.get("description", self.description)
         if "role_permissions" in data:
@@ -158,11 +177,7 @@ class VoiceChannel(abc.Messageable):
         return self
 
 
-MessageableChannel = Union[TextChannel, DMChannel, GroupChannel, SavedMessageChannel]
-
-
-def channel_factory(data: ChannelPayload) -> type[abc.Messageable]:
-    # Literal["SavedMessages", "DirectMessage", "Group", "TextChannel", "VoiceChannel"]
+def channel_factory(data: ChannelPayload) -> Channel:
     channel_type = data["channel_type"]
     if channel_type == "SavedMessages":
         return SavedMessageChannel
@@ -176,3 +191,11 @@ def channel_factory(data: ChannelPayload) -> type[abc.Messageable]:
         return VoiceChannel
     else:
         raise Exception
+
+
+ServerChannel = Union[TextChannel, VoiceChannel]
+DirectMessage = Union[GroupChannel, DMChannel]
+Channel = Union[
+    TextChannel, SavedMessageChannel, DirectMessage, GroupChannel, VoiceChannel
+]
+MessageableChannel = Union[TextChannel, DMChannel, GroupChannel, SavedMessageChannel]

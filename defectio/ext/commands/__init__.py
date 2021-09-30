@@ -8,7 +8,6 @@ An extension module to facilitate creation of bot commands.
 :copyright: (c) 2021-present Darkflame72
 :license: MIT, see LICENSE for more details.
 """
-
 """
 The MIT License (MIT)
 
@@ -31,13 +30,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
-
 from .bot import *
+from .cog import *
 from .context import *
-from .core import *
-from .errors import *
-from .help import *
 from .converter import *
 from .cooldowns import *
-from .cog import *
+from .core import *
+from .errors import *
 from .flags import *
+from .help import *

@@ -1,12 +1,13 @@
 from __future__ import annotations
-from defectio.types.payloads import IconPayload
-from defectio.models.permission import ChannelPermission, ServerPermission
-from defectio.models.colour import Colour
 
 from typing import Optional
 from typing import TYPE_CHECKING
 
-from .mixins import Hashable
+from defectio.models.colour import Colour
+from defectio.models.permission import ChannelPermission
+from defectio.models.permission import ServerPermission
+
+from .objects import Unique
 
 if TYPE_CHECKING:
     from ..types.payloads import (
@@ -19,6 +20,7 @@ if TYPE_CHECKING:
     from ..types.websocket import ServerUpdate, ServerRoleUpdate
     from .member import Member
     from .channel import MessageableChannel
+    from defectio.types.payloads import IconPayload
 
 
 class Icon:
@@ -96,7 +98,7 @@ class SystemMessages:
         return self.__repr__()
 
 
-class Role(Hashable):
+class Role(Unique):
     def __init__(self, id: str, data: RolePayload, state: ConnectionState) -> None:
         self.id = id
         self._state = state
@@ -128,7 +130,7 @@ class Role(Hashable):
         return f"<Role server={self.server.id} name={self.name} colour={self.colour}>"
 
 
-class Category(Hashable):
+class Category(Unique):
     def __init__(self, data: CategoryPayload, state: ConnectionState) -> None:
         self._state = state
         self.channels: list[MessageableChannel] = []
@@ -141,7 +143,7 @@ class Category(Hashable):
             self.channels.append(self._state.get_channel(channel))
 
 
-class Server(Hashable):
+class Server(Unique):
     def __init__(self, data: ServerPayload, state: ConnectionState):
         self.channel_ids: list[str] = []
         self.member_ids: list[str] = []
@@ -258,8 +260,9 @@ class Server(Hashable):
             list of all text channels
         """
         from .channel import TextChannel
+
         return [i for i in self.channels if isinstance(i, TextChannel)]
-    
+
     @property
     def voice_channels(self):
         """All voice channels in the server
@@ -294,3 +297,12 @@ class Server(Hashable):
             list of all categories
         """
         return list(self._categories.values())
+
+
+class Ban:
+    __slots__ = ("user", "server", "reason")
+
+    def __init__(self, user: Member, server: Server, reason: Optional[str] = None):
+        self.user = user
+        self.server = server
+        self.reason = reason
