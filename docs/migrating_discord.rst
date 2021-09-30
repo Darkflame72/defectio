@@ -1,7 +1,7 @@
 Migrating from discord
 ======================
 
-If you are coming from discord bot development there is a large similarity with this library and discord.py.
+If you are coming from Discord bot development there is a large similarity with this library and discord.py.
 The overall structure and behaviour of the library is similar allowing a nearly seamless transition.
 
 Due to differences between Revolt and Discord a couple things have changed in behaviour and naming.
@@ -9,7 +9,7 @@ Due to differences between Revolt and Discord a couple things have changed in be
 Guild is now Server
 ~~~~~~~~~~~~~~~~~~~~~
 
-The official API documentation calls the "Server" concept a "Server" instead of how Discord handles it.
+The official API documentation calls the "Server" concept a "Server" instead of a "Guild", unlike Discord.
 
 A list of differences is as follows:
 
@@ -39,7 +39,7 @@ Self Bots
 ~~~~~~~~~~~~~~~~~~~~~
 
 Unlike Discord, self bots are allowed and are to a certain extent encouraged. These can be used to enhance and customise
-your Revolt experience. You have the option to login as a user or as a bot the two are functionality identical. The 
+your Revolt experience. You have the option to login as a user or a bot, both of which are functionally identical. The 
 different connection methods are as follows:
 
     .. code-block:: python
