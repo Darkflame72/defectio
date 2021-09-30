@@ -36,8 +36,8 @@ If logging is enabled, this library will attempt to warn you that blocking is oc
 ``Heartbeat blocked for more than N seconds.``
 See :doc:`logging` for details on enabling logging.
 
-A common source of blocking for too long is something like :func:`time.sleep`. Don't do that. Use :func:`asyncio.sleep`
-instead. Similar to this example: ::
+A common source of blocking for too long is using :func:`time.sleep`. Instead, use the asynchronous version, :func:`asyncio.sleep`.
+Similar to this example: ::
 
     # bad
     time.sleep(10)
