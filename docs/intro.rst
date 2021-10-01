@@ -31,10 +31,10 @@ Virtual Environments
 
 Sometimes you want to keep libraries from polluting system installs or use a different version of
 libraries than the ones installed on the system. You might also not have permissions to install libraries system-wide.
-For this purpose, the standard library as of Python 3.3 comes with a concept called "Virtual Environment"s to
+For this purpose, Python comes with a concept called "Virtual Environments" to
 help maintain these separate versions.
 
-A more in-depth tutorial is found on :doc:`py:tutorial/venv`.
+A more in-depth tutorial can be found at :doc:`py:tutorial/venv`.
 
 However, for the quick and dirty:
 
@@ -72,7 +72,7 @@ defectio revolves around the concept of :ref:`events <defectio-api-events>`.
 An event is something you listen to and then respond to. For example, when a message
 happens, you will receive an event about it that you can respond to.
 
-A quick example to showcase how events work:
+Here is a quick example to showcase how events work:
 
 .. code-block:: python3
 
@@ -83,7 +83,7 @@ A quick example to showcase how events work:
             print(f'Logged on as {self.user}!')
 
         async def on_message(self, message):
-            print(f'Message from {messsage.author}: {message.content}')
+            print(f'Message from {message.author}: {message.content}')
 
     client = MyClient()
     client.run('my token goes here')

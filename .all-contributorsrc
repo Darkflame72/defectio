@@ -58,6 +58,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Dark42ed",
+      "name": "Dark42ed",
+      "avatar_url": "https://avatars.githubusercontent.com/u/74568473?v=4",
+      "profile": "https://dark42ed.cf/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

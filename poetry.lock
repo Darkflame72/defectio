@@ -367,7 +367,7 @@ toml = "*"
 
 [[package]]
 name = "flake8-bugbear"
-version = "21.9.1"
+version = "21.9.2"
 description = "A plugin for flake8 finding likely bugs and design problems in your program. Contains warnings that don't belong in pyflakes and pycodestyle."
 category = "dev"
 optional = false
@@ -581,7 +581,7 @@ python-versions = "*"
 
 [[package]]
 name = "nox"
-version = "2021.6.12"
+version = "2021.10.1"
 description = "Flexible test automation."
 category = "dev"
 optional = false
@@ -1181,7 +1181,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "bd983027d543eaffaa021d705d196c7ece0879f36105317171ee9868270d5639"
+content-hash = "fc2779b459669e2f4b9f524401092440c0faad087a68951400ae819c9f665bc3"
 
 [metadata.files]
 aiofiles = [
@@ -1398,8 +1398,8 @@ flake8-black = [
     {file = "flake8_black-0.2.3-py3-none-any.whl", hash = "sha256:cc080ba5b3773b69ba102b6617a00cc4ecbad8914109690cfda4d565ea435d96"},
 ]
 flake8-bugbear = [
-    {file = "flake8-bugbear-21.9.1.tar.gz", hash = "sha256:2f60c8ce0dc53d51da119faab2d67dea978227f0f92ed3c44eb7d65fb2e06a96"},
-    {file = "flake8_bugbear-21.9.1-py36.py37.py38-none-any.whl", hash = "sha256:45bfdccfb9f2d8aa140e33cac8f46f1e38215c13d5aa8650e7e188d84e2f94c6"},
+    {file = "flake8-bugbear-21.9.2.tar.gz", hash = "sha256:db9a09893a6c649a197f5350755100bb1dd84f110e60cf532fdfa07e41808ab2"},
+    {file = "flake8_bugbear-21.9.2-py36.py37.py38-none-any.whl", hash = "sha256:4f7eaa6f05b7d7ea4cbbde93f7bcdc5438e79320fa1ec420d860c181af38b769"},
 ]
 flake8-docstrings = [
     {file = "flake8-docstrings-1.6.0.tar.gz", hash = "sha256:9fe7c6a306064af8e62a055c2f61e9eb1da55f84bb39caef2b84ce53708ac34b"},
@@ -1611,8 +1611,8 @@ nodeenv = [
     {file = "nodeenv-1.6.0.tar.gz", hash = "sha256:3ef13ff90291ba2a4a7a4ff9a979b63ffdd00a464dbe04acf0ea6471517a4c2b"},
 ]
 nox = [
-    {file = "nox-2021.6.12-py3-none-any.whl", hash = "sha256:1e90df301f6622efb1c29d1586e5a5755846b1eb99b2764230304f8fa31d1734"},
-    {file = "nox-2021.6.12.tar.gz", hash = "sha256:955dbeb8e657a08226f8c1c8f8d1e2a40fe5438a792056314f351e504639a80f"},
+    {file = "nox-2021.10.1-py3-none-any.whl", hash = "sha256:1bb224fb09c26c482932f0e3038ef01c27b4025d559066443a4da1f96daad01a"},
+    {file = "nox-2021.10.1.tar.gz", hash = "sha256:0a1c735d5e90fa234046b58a5ad61d08bc13ae77ab213da9b58d5cc2d25023ae"},
 ]
 nox-poetry = [
     {file = "nox-poetry-0.8.6.tar.gz", hash = "sha256:2cd8dd1f539a877d1fae78ffe47e3943644d6f2fc0a2833d805513d8ccb1c749"},

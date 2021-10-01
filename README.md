@@ -26,7 +26,7 @@ async def on_message(message: defectio.Message):
         await message.channel.send("Hello!")
 
 
-client.run("")
+client.run("your token here")
 ```
 
 ## Contribute
@@ -54,6 +54,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://insrt.uk"><img src="https://avatars.githubusercontent.com/u/38285861?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Paul Makles</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/issues?q=author%3Ainsertish" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/Cearaj"><img src="https://avatars.githubusercontent.com/u/75398448?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Cearaj</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/commits?author=Cearaj" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/jafreli"><img src="https://avatars.githubusercontent.com/u/31709372?v=4?s=100" width="100px;" alt=""/><br /><sub><b>jafreli</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/commits?author=jafreli" title="Code">💻</a></td>
+    <td align="center"><a href="https://dark42ed.cf/"><img src="https://avatars.githubusercontent.com/u/74568473?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dark42ed</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/commits?author=Dark42ed" title="Documentation">📖</a></td>
   </tr>
 </table>
 
