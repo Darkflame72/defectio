@@ -36,8 +36,8 @@ with the library.
 
 There's a lot going on here, so let's walk you through it step by step.
 
-1. The first line just imports the library, if this raises a `ModuleNotFoundError` or `ImportError`
-   then head on over to :ref:`installing` section to properly install.
+1. The first line imports the library, if this raises a `ModuleNotFoundError` or `ImportError`
+   then head over to the :ref:`installing` section to properly install defectio.
 2. Next, we create an instance of a :class:`Client`. This client is our connection to Revolt.
 3. We then use the :meth:`Client.event` decorator to register an event. This library has many events.
    Since this library is asynchronous, we do things in a "callback" style manner.
@@ -49,12 +49,12 @@ There's a lot going on here, so let's walk you through it step by step.
    sure that we ignore messages from ourselves. We do this by checking if the :attr:`Message.author`
    is the same as the :attr:`Client.user`.
 5. Afterwards, we check if the :class:`Message.content` starts with ``'$hello'``. If it does,
-   then we send a message in the channel it was used in with ``'Hello!'``.
+   then we send a message in the channel it was used in containing ``'Hello!'``.
 6. Finally, we run the bot with our login token.
 
 
 Now that we've made a bot, we have to *run* the bot. Luckily, this is simple since this is just a
-Python script, we can run it directly.
+Python script, so we can run it directly.
 
 On macos/linux:
 
