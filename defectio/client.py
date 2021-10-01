@@ -558,7 +558,7 @@ class Client:
         await self.login(token, bot=bot)
         await self.connect()
 
-    def run(self, token: Optional[str] = None, **kwargs: Any) -> None:
+    def run(self, token: Optional[str] = None, *, bot: bool = True) -> None:
         """A blocking call that abstracts away the event loop
         initialisation from you.
 
@@ -586,14 +586,11 @@ class Client:
         token: Optional[:class:`str`]
             The authentication token of the bot to login.
 
-        session_token: Optional[:class:`str`]
-            The session token of the logged in user to login.
+        bot: bool
+            Indicates if the client is a bot account. Defaults to ``True``.
 
-        user_id: Optional[:class:`str`]
-            The user ID of the logged in user to login.
         """
         loop = self.loop
-        kwargs["token"] = token
 
         try:
             loop.add_signal_handler(signal.SIGINT, loop.stop)
@@ -603,7 +600,7 @@ class Client:
 
         async def runner() -> None:
             try:
-                await self.start(**kwargs)
+                await self.start(token, bot)
             finally:
                 if not self.is_closed():
                     await self.close()

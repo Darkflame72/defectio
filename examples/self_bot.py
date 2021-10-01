@@ -18,6 +18,6 @@ async def on_message(message: defectio.Message):
 
 
 client.run(
-    session_token="session_token",
-    user_id="user_id",
+    token="session_token",
+    bot=True,
 )
