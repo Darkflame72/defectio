@@ -76,7 +76,7 @@ class SavedMessageChannel(abc.Messageable):
     def __init__(self, data: ChannelPayload, state: ConnectionState):
         self.id = data.get("_id")
         self._state: ConnectionState = state
-        super().__init__(data, state)
+        # super().__init__(data, state)
 
     async def _get_channel(self) -> SavedMessageChannel:
         return self
@@ -111,7 +111,7 @@ class DMChannel(abc.Messageable):
 
 class GroupChannel(abc.Messageable):
     def __init__(self, data: ChannelPayload, state: ConnectionState):
-        super().__init__(data, state)
+        # super().__init__(data, state)
         self.id = data.get("_id")
         self.name = data.get("name")
         self.active = data.get("active")

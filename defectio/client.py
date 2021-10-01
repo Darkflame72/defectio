@@ -600,7 +600,7 @@ class Client:
 
         async def runner() -> None:
             try:
-                await self.start(token, bot)
+                await self.start(token=token, bot=bot)
             finally:
                 if not self.is_closed():
                     await self.close()
