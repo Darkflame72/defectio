@@ -76,6 +76,7 @@ class SavedMessageChannel(abc.Messageable):
     def __init__(self, data: ChannelPayload, state: ConnectionState):
         self.id = data.get("_id")
         self._state: ConnectionState = state
+        self.type: str = data["channel_type"]
         # super().__init__(data, state)
 
     async def _get_channel(self) -> SavedMessageChannel:
@@ -87,6 +88,7 @@ class DMChannel(abc.Messageable):
         self._state = state
         self.id = data.get("_id")
         self.active = data.get("active")
+        self.type: str = data["channel_type"]
         # if "last_message" in data:
         #     self.last_message = state.get_message(data.get("last_message").get("_id"))
         # else:
@@ -117,6 +119,7 @@ class GroupChannel(abc.Messageable):
         self.active = data.get("active")
         self._recipients = data.get("recipients")
         self._state: ConnectionState = state
+        self.type: str = data["channel_type"]
 
     def _update(self, data: ChannelPayload) -> None:
         self.name = data.get("name", self.name)
@@ -136,7 +139,7 @@ class VoiceChannel(abc.Messageable):
     def __init__(self, state: ConnectionState, server: Server, data):
         self._state: ConnectionState = state
         self.id: str = data["_id"]
-        self._type: str = data["channel_type"]
+        self.type: str = data["channel_type"]
         self.server = server
         self.name: str = data["name"]
         self.description: Optional[str] = data.get("description")
