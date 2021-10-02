@@ -31,7 +31,12 @@ __all__ = (
 
 
 class PartialChannel(Unique):
-    pass
+
+    __slots__ = "_state"
+
+    def __init__(self, data: ChannelPayload, state: ConnectionState):
+        self.id = Object(data["_id"])
+        self._state = state
 
 
 class Invite:
@@ -41,7 +46,7 @@ class Invite:
         self.code = code
 
 
-class TextChannel(abc.Messageable, abc.ServerChannel, PartialChannel):
+class TextChannel(PartialChannel, abc.Messageable, abc.ServerChannel):
     __slots__ = (
         "name",
         "description",
@@ -53,9 +58,7 @@ class TextChannel(abc.Messageable, abc.ServerChannel, PartialChannel):
     )
 
     def __init__(self, *, state: ConnectionState, server: Server, data: ChannelPayload):
-        self._state: ConnectionState = state
-        self.id: Object = Object(data["_id"])
-        self.type: str = data["channel_type"]
+        super().__init__(state=state, data=data)
         self.server = server
         self.name = data["name"]
         self.description = data.get("description")
@@ -86,22 +89,20 @@ class TextChannel(abc.Messageable, abc.ServerChannel, PartialChannel):
         return self
 
 
-class SavedMessageChannel(abc.Messageable, PartialChannel):
+class SavedMessageChannel(PartialChannel, abc.Messageable):
     def __init__(self, data: ChannelPayload, state: ConnectionState):
-        self.id: Object = Object(data.get("_id"))
-        self._state: ConnectionState = state
+        super().__init__(state=state, data=data)
 
     async def _get_channel(self) -> SavedMessageChannel:
         return self
 
 
-class DMChannel(abc.Messageable, PartialChannel):
+class DMChannel(PartialChannel, abc.Messageable):
 
-    __slots__ = ("id", "active", "_recipients")
+    __slots__ = ("active", "_recipients")
 
     def __init__(self, data: DMChannelPayload, state: ConnectionState):
-        self._state = state
-        self.id = data.get("_id")
+        super().__init__(state=state, data=data)
         self.active = data.get("active")
         # if "last_message" in data:
         #     self.last_message = state.get_message(data.get("last_message").get("_id"))
@@ -128,10 +129,9 @@ class DMChannel(abc.Messageable, PartialChannel):
         return f"<DMChannel id={self.id} recipient={self.recipient!r}>"
 
 
-class GroupChannel(abc.Messageable, PartialChannel):
+class GroupChannel(PartialChannel, abc.Messageable):
     def __init__(self, data: ChannelPayload, state: ConnectionState):
         super().__init__(data, state)
-        self.id = data.get("_id")
         self.name = data.get("name")
         self.active = data.get("active")
         self._recipients = data.get("recipients")
@@ -151,11 +151,9 @@ class GroupChannel(abc.Messageable, PartialChannel):
         return [self._state.get_user(user) for user in self._recipients]
 
 
-class VoiceChannel(abc.Messageable, PartialChannel):
+class VoiceChannel(PartialChannel, abc.Messageable):
     def __init__(self, state: ConnectionState, server: Server, data):
-        self._state: ConnectionState = state
-        self.id: Object = Object(data["_id"])
-        self._type: str = data["channel_type"]
+        super().__init__(state=state, data=data)
         self.server = server
         self.name: str = data["name"]
         self.description: Optional[str] = data.get("description")
