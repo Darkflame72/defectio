@@ -46,8 +46,8 @@ different connection methods are as follows:
 
         # Login as a user
         client = Client().run(
-            session_token="session_token",
-            user_id="user_id"
+            token="session_token",
+            bot=False
         )
 
         # Login as a bot
