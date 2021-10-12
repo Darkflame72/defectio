@@ -30,7 +30,7 @@ aiofiles = "^0.7.0"
 [tool.poetry.dev-dependencies]
 black = "^21.9b0"
 mypy = "^0.910"
-flake8 = "^3.9.2"
+flake8 = "^4.0.1"
 nox = "^2021.10.1"
 darglint = "^1.8.0"
 nox-poetry = "^0.8.6"
