@@ -36,7 +36,7 @@ darglint = "^1.8.0"
 nox-poetry = "^0.8.6"
 coverage = {extras = ["toml"], version = "^6.0"}
 pytest = "^6.2.5"
-pytest-asyncio = "^0.15.1"
+pytest-asyncio = "^0.16.0"
 Sphinx = "^4.2.0"
 sphinxcontrib-trio = "^1.1.2"
 pep8-naming = "^0.12.1"
