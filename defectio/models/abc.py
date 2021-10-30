@@ -6,9 +6,9 @@ from typing import runtime_checkable
 from typing import TYPE_CHECKING
 from typing import Union
 
+from defectio.models.objects import Unique
 from defectio.models.server import Category
 from defectio.types.payloads import ChannelPayload
-from defectio.models.objects import Unique
 
 if TYPE_CHECKING:
     from defectio.state import ConnectionState

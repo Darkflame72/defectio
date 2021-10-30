@@ -10,7 +10,7 @@ from nox_poetry import session
 
 
 package = "defectio"
-python_versions = ["3.9"]
+python_versions = ["3.9", "3.10"]
 nox.options.sessions = (
     "pre-commit",
     "safety",

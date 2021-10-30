@@ -7,7 +7,8 @@ from typing import Optional
 from typing import TYPE_CHECKING
 from typing import Union
 
-from defectio.models.objects import Object, Unique
+from defectio.models.objects import Object
+from defectio.models.objects import Unique
 
 if TYPE_CHECKING:
     from defectio.state import ConnectionState

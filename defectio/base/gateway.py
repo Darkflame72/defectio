@@ -2,6 +2,7 @@
 import abc
 import enum
 import typing
+
 from defectio.models import objects
 from defectio.models.channel import TextChannel
 

@@ -1,8 +1,7 @@
-from defectio.models.raw_models import RawMessageDeleteEvent, RawMessageUpdateEvent
-from defectio.models.message import Message
 import inspect
 import logging
 import re
+from copy import copy
 from typing import Any
 from typing import Callable
 from typing import Optional
@@ -10,7 +9,13 @@ from typing import TYPE_CHECKING
 
 from defectio.base import cache as cache_
 from defectio.base import event_manager
-from copy import copy
+from defectio.models.abc import User
+from defectio.models.channel import Channel, GroupChannel
+from defectio.models.member import Member
+from defectio.models.message import Message
+from defectio.models.raw_models import RawMessageDeleteEvent
+from defectio.models.raw_models import RawMessageUpdateEvent
+from defectio.models.server import Server
 
 if TYPE_CHECKING:
     from defectio.types.websocket import (
@@ -81,15 +86,27 @@ class EventManager(event_manager.EventManager):
 
     async def parse_ready(self, payload: ReadyPayload) -> None:
         if self._cache:
-            pass
+            for payload_user in payload["users"]:
+                user = User(payload_user)
+                self._cache.set_user(user)
+
+            for payload_server in payload["servers"]:
+                server = Server(payload_server)
+                self._cache.set_server(server)
+
+            for payload_channel in payload["channels"]:
+                channel = Channel(payload_channel)
+                self._cache.set_channel(channel)
 
         await self.dispatch("ready")
 
     async def parse_message(self, payload: MessagePayload) -> None:
-        if self._cache:
-            pass
+        message = Message(payload)
 
-        await self.dispatch("message")
+        if self._cache:
+            self._cache.set_message(message)
+
+        await self.dispatch("message", message)
 
     async def parse_message_update(self, payload: MessageUpdatePayload) -> None:
         await self.dispatch("raw_message_update", RawMessageUpdateEvent(payload))
@@ -110,28 +127,39 @@ class EventManager(event_manager.EventManager):
                 self._cache.delete_message(message)
 
     async def parse_channel_create(self, payload: ChannelCreatePayload) -> None:
-        if self._cache:
-            pass
+        channel = Channel(payload)
 
-        await self.dispatch("channel_create")
+        if self._cache:
+            self._cache.set_server_channel(channel)
+
+        await self.dispatch("channel_create", channel)
 
     async def parse_channel_update(self, payload: ChannelUpdatePayload) -> None:
         if self._cache:
-            pass
+            channel = self._cache.get_server_channel(payload["_id"])
+            if channel is not None:
+                old_channel = copy(channel)
+                channel._update(payload)
+                await self.dispatch("channel_update", old_channel, channel)
 
         await self.dispatch("channel_update")
 
     async def parse_channel_delete(self, payload: ChannelDeletePayload) -> None:
         if self._cache:
-            pass
-
-        await self.dispatch("channel_delete")
+            channel = self._cache.get_server_channel(payload["_id"])
+            if channel is not None:
+                old_channel = copy(channel)
+                self._cache.delete_server_channel(channel)
+                await self.dispatch("channel_delete", old_channel, channel)
 
     async def parse_channel_group_join(self, payload: ChannelGroupJoinPayload) -> None:
+        channel_group = GroupChannel(payload)
+
         if self._cache:
+            # self._cache.set_dm_channel_id(channel_group.id, channel_group.recipients)
             pass
 
-        await self.dispatch("channel_group_join")
+        await self.dispatch("channel_group_join", channel_group)
 
     async def parse_channel_group_leave(
         self, payload: ChannelGroupLeavePayload
@@ -145,17 +173,19 @@ class EventManager(event_manager.EventManager):
         self, payload: ChannelStartTypingPayload
     ) -> None:
         if self._cache:
-            pass
+            channel = self._cache.get_server_channel(payload["id"])
+            user = self._cache.get_user(payload["user"])
 
-        await self.dispatch("channel_start_typing")
+            await self.dispatch("channel_start_typing", channel, user)
 
     async def parse_channel_stop_typing(
         self, payload: ChannelStopTypingPayload
     ) -> None:
         if self._cache:
-            pass
+            channel = self._cache.get_server_channel(payload["id"])
+            user = self._cache.get_user(payload["user"])
 
-        await self.dispatch("channel_stop_typing")
+            await self.dispatch("channel_start_typing", channel, user)
 
     async def parse_channel_ack(self, payload: ChannelAckPayload) -> None:
         if self._cache:
@@ -182,26 +212,30 @@ class EventManager(event_manager.EventManager):
                 self._cache.delete_server(server)
 
     async def parse_server_member_join(self, payload: ServerMemberJoinPayload) -> None:
-        if self._cache:
-            pass
+        member = Member(payload)
 
-        await self.dispatch("server_member_join")
+        if self._cache:
+            self._cache.set_member(member)
+
+        await self.dispatch("server_member_join", member)
 
     async def parse_server_member_leave(
         self, payload: ServerMemberLeavePayload
     ) -> None:
         if self._cache:
-            pass
-
-        await self.dispatch("server_member_leave")
+            member = self._cache.de(payload["_id"], payload["user"])
+            if member is not None:
+                await self.dispatch("server_member_leave", copy(member))
+                self._cache.delete_member(member)
 
     async def parse_server_member_update(
         self, payload: ServerMemberUpdatePayload
     ) -> None:
         if self._cache:
-            pass
-
-        await self.dispatch("server_member_update")
+            member = self._cache.get_member(payload["_id"])
+            old_member = copy(member)
+            member._update(payload)
+            await self.dispatch("server_member_update", old_member, member)
 
     async def parse_server_role_update(self, payload: ServerRoleUpdatePayload) -> None:
         if self._cache:
@@ -217,9 +251,10 @@ class EventManager(event_manager.EventManager):
 
     async def parse_user_update(self, payload: UserUpdatePayload) -> None:
         if self._cache:
-            pass
-
-        await self.dispatch("user_update")
+            user = self._cache.get_user(payload["_id"])
+            old_user = copy(user)
+            user._update(payload)
+            await self.dispatch("user_update", old_user, user)
 
     async def parse_user_relationship(self, payload: UserRelationshipPayload) -> None:
         if self._cache:

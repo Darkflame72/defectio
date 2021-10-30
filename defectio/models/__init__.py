@@ -1,5 +1,4 @@
 """Classes for all data types"""
-
 from __future__ import annotations
 
 from defectio.models import abc
@@ -13,6 +12,6 @@ from defectio.models.member import *
 from defectio.models.message import *
 from defectio.models.objects import *
 from defectio.models.permission import *
+from defectio.models.raw_models import *
 from defectio.models.server import *
 from defectio.models.user import *
-from defectio.models.raw_models import *

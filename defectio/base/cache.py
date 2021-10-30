@@ -3,20 +3,16 @@ from typing import Optional
 from typing import Sequence
 from typing import TYPE_CHECKING
 
+from defectio.models import ClientUser
+from defectio.models import DirectMessage
+from defectio.models import Message
+from defectio.models import objects
+from defectio.models import PartialUser
+from defectio.models import Server
+from defectio.models import ServerChannel
+from defectio.models import User
 from defectio.models.member import Member
 from defectio.models.server import Role
-
-from defectio.models import (
-    Server,
-    ServerChannel,
-    ClientUser,
-    objects,
-    Message,
-    PartialUser,
-    User,
-    DirectMessage,
-)
-from defectio.models import objects
 
 
 __all__ = ["Cache", "MutableCache"]
@@ -133,7 +129,7 @@ class Cache(abc.ABC):
 
     @abc.abstractmethod
     def get_member(
-        self, server: objects.ObjectishOr[Server], user, /
+        self, server: objects.ObjectishOr[Server], user: objects.ObjectishOr[User], /
     ) -> Optional[Member]:
         """Get a member object from the cache.
 
@@ -141,7 +137,7 @@ class Cache(abc.ABC):
         ----------
         server : objects.ObjectishOr[Server]
             Object or ID of the server to get a cached member for.
-        user :
+        user : objects.ObjectishOr[User]
             Object or ID of the user to get a cached member for.
 
         Returns
