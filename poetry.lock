@@ -431,7 +431,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "furo"
-version = "2021.10.9"
+version = "2021.11.15"
 description = "A clean customisable Sphinx documentation theme."
 category = "dev"
 optional = false
@@ -442,8 +442,8 @@ beautifulsoup4 = "*"
 sphinx = ">=4.0,<5.0"
 
 [package.extras]
-doc = ["myst-parser", "sphinx-copybutton", "sphinx-design", "sphinx-inline-tabs"]
 test = ["pytest", "pytest-cov", "pytest-xdist"]
+doc = ["myst-parser", "sphinx-copybutton", "sphinx-design", "sphinx-inline-tabs"]
 
 [[package]]
 name = "gitdb"
@@ -1196,7 +1196,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "ed34038063d4c574ebe5106e9eb85d826b2f94ae8f73f4db5cd8a971a95bdd02"
+content-hash = "650dfe398e83b202aac468f1b3292bd5a30ef877a220cc001b11bc787d9a7a37"
 
 [metadata.files]
 aiofiles = [
@@ -1519,8 +1519,8 @@ frozenlist = [
     {file = "frozenlist-1.2.0.tar.gz", hash = "sha256:68201be60ac56aff972dc18085800b6ee07973c49103a8aba669dee3d71079de"},
 ]
 furo = [
-    {file = "furo-2021.10.9-py3-none-any.whl", hash = "sha256:8da4448836e72db59033cd8d70dbdae96b0523c4424d806216febd38253870e8"},
-    {file = "furo-2021.10.9.tar.gz", hash = "sha256:2baa42a22ede3e6e95c6182ab364bac2ec15b79bc7f9ca7fb09fd9aec4b3540c"},
+    {file = "furo-2021.11.15-py3-none-any.whl", hash = "sha256:bdca82c3f211a24f850dcb12be3cb0e3f152cd3f2adfc0449bf9db6a07856bd3"},
+    {file = "furo-2021.11.15.tar.gz", hash = "sha256:17b9fcf4de20f661d13db1ea83f11f7bf30be13738cffc88637889bf79c0469f"},
 ]
 gitdb = [
     {file = "gitdb-4.0.7-py3-none-any.whl", hash = "sha256:6c4cc71933456991da20917998acbe6cf4fb41eeaab7d6d67fbc05ecd4c865b0"},
