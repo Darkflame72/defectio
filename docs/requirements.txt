@@ -3,7 +3,7 @@ sphinxcontrib_trio==1.1.2
 furo==2021.10.9
 sphinxext-opengraph==0.4.2
 sphinx-copybutton==0.4.0
-aiohttp==3.7.4.post0
+aiohttp==3.8.1
 ulid-py==1.1.0
 orjson==3.6.4
 msgpack==1.0.2
