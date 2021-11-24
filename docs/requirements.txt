@@ -6,4 +6,4 @@ sphinx-copybutton==0.4.0
 aiohttp==3.8.1
 ulid-py==1.1.0
 orjson==3.6.4
-msgpack==1.0.2
+msgpack==1.0.3
