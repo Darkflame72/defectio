@@ -374,7 +374,7 @@ toml = "*"
 
 [[package]]
 name = "flake8-bugbear"
-version = "21.9.2"
+version = "21.11.28"
 description = "A plugin for flake8 finding likely bugs and design problems in your program. Contains warnings that don't belong in pyflakes and pycodestyle."
 category = "dev"
 optional = false
@@ -385,7 +385,7 @@ attrs = ">=19.2.0"
 flake8 = ">=3.0.0"
 
 [package.extras]
-dev = ["coverage", "black", "hypothesis", "hypothesmith"]
+dev = ["coverage", "hypothesis", "hypothesmith (>=0.2)", "pre-commit"]
 
 [[package]]
 name = "flake8-docstrings"
@@ -1197,7 +1197,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "694e2f60b1ac1de85122bf484f843f6b4ee6120456a4d2be90f1bc092f20779f"
+content-hash = "4d6c347c6802447592cb1da538643229abb02818fbcd421ee19164c8139d2c2d"
 
 [metadata.files]
 aiofiles = [
@@ -1444,8 +1444,8 @@ flake8-black = [
     {file = "flake8_black-0.2.3-py3-none-any.whl", hash = "sha256:cc080ba5b3773b69ba102b6617a00cc4ecbad8914109690cfda4d565ea435d96"},
 ]
 flake8-bugbear = [
-    {file = "flake8-bugbear-21.9.2.tar.gz", hash = "sha256:db9a09893a6c649a197f5350755100bb1dd84f110e60cf532fdfa07e41808ab2"},
-    {file = "flake8_bugbear-21.9.2-py36.py37.py38-none-any.whl", hash = "sha256:4f7eaa6f05b7d7ea4cbbde93f7bcdc5438e79320fa1ec420d860c181af38b769"},
+    {file = "flake8-bugbear-21.11.28.tar.gz", hash = "sha256:5d7aad75b270ab93d64d479f4285909aaceae177b3fee482a80d2affe904ab01"},
+    {file = "flake8_bugbear-21.11.28-py36.py37.py38-none-any.whl", hash = "sha256:35e6333c37d9e9806d9919acd10740cd4de111c180afe9921c8f4410fbb76e1c"},
 ]
 flake8-docstrings = [
     {file = "flake8-docstrings-1.6.0.tar.gz", hash = "sha256:9fe7c6a306064af8e62a055c2f61e9eb1da55f84bb39caef2b84ce53708ac34b"},
