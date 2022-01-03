@@ -7,11 +7,11 @@ from typing import Optional
 from typing import Union
 
 from defectio.models import objects
-from defectio.models.apiinfo import ApiInfo
-from defectio.models.attachment import Attachment
+from defectio.models.api_info import ApiInfo
+from defectio.models.attachmet import Attachment
 from defectio.models.channel import DMChannel
 from defectio.models.channel import GroupChannel
-from defectio.models.channel import Invite
+from defectio.models.server import Invite
 from defectio.models.channel import PartialChannel
 from defectio.models.channel import ServerChannel
 from defectio.models.channel import TextChannel
@@ -25,9 +25,10 @@ from defectio.models.server import Category
 from defectio.models.server import Colour
 from defectio.models.server import Role
 from defectio.models.server import Server
-from defectio.models.server import SystemMessages
-from defectio.models.user import Bot
-from defectio.models.user import ClientUser
+
+# from defectio.models.server import SystemMessages
+# from defectio.models.user import Bot
+from defectio.models.user import OwnUser
 from defectio.models.user import PartialUser
 from defectio.models.user import Profile
 from defectio.models.user import Relationship
@@ -37,6 +38,10 @@ from defectio.types.payloads import JoinVoice
 from defectio.types.payloads import LoginPayload
 from defectio.types.payloads import RelationType
 from defectio.types.payloads import SessionPayload
+
+# TODO
+SystemMessages = None
+Bot = None
 
 
 class Messages:
@@ -271,12 +276,12 @@ class RESTClient(abc.ABC):
         """
 
     @abc.abstractmethod
-    async def fetch_user(self) -> ClientUser:
+    async def fetch_user(self) -> OwnUser:
         """Fetch the current user.
 
         Returns
         -------
-        ClientUser
+        OwnUser
             User information.
         """
 

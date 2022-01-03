@@ -24,12 +24,12 @@ include = ["defectio/py.typed"]
 python = "^3.9"
 aiohttp = "^3.7.4"
 ulid-py = "^1.1.0"
-orjson = "^3.6.3"
 msgpack = "^1.0.2"
 aiofiles = "^0.7.0"
 aiodns = {version = "^3.0.0", extras = ["speedups"]}
 Brotli = {version = "^1.0.9", extras = ["speedups"]}
 cchardet = {version = "^2.1.7", extras = ["speedups"]}
+attrs = "^21.4.0"
 
 
 [tool.poetry.dev-dependencies]

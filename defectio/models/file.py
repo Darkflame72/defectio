@@ -4,22 +4,15 @@ import io
 import os
 from typing import Optional
 from typing import Union
+import attr
 
 __all__ = ["File"]
 
 
 class File:
-    """Respresents a file about to be uploaded to revolt
+    """Respresents a file about to be uploaded to revolt."""
 
-    Parameters
-    -----------
-    file: Union[str, bytes, os.PathLike, io.BufferedIOBase]
-        The name of the file or the content of the file in bytes, text files will be need to be encoded
-    filename: Optional[str]
-        The filename of the file when being uploaded, this will default to the name of the file if one exists
-    spoiler: bool
-        Determines if the file will be a spoiler, this prefexes the filename with `SPOILER_`
-    """
+    __slots__ = ("fp", "_original_pos", "_owner", "_closer", "filename", "spoiler")
 
     def __init__(
         self,

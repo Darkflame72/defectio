@@ -1,112 +1,69 @@
 from __future__ import annotations
 
-import asyncio
-import io
-from typing import Optional
+import attr
 from typing import TYPE_CHECKING
-from typing import Union
-
-from defectio.models.objects import Unique
-from defectio.models.user import PartialUser
-
-from .abc import Messageable
+from defectio.models import objects
+from defectio.models.attachmet import Attachment
 
 
 if TYPE_CHECKING:
-    from ..state import ConnectionState
-    from ..types.payloads import MessagePayload, AttachmentPayload
-    from ..types.websocket import MessageUpdate
-    from .channel import MessageableChannel
+    from defectio.models.user import PartialUser
+    from defectio.models.file import File
+    from defectio import traits
+    from typing import Optional
+    from defectio.models.channel import MessageableChannel
 
 
-class Attachment:
-    def __init__(self, state: ConnectionState, data: AttachmentPayload):
-        self._state: ConnectionState = state
-        self.id = data.get("_id")
-        self.tag = data.get("tag")
-        self.size = data.get("size")
-        self.filename = data.get("filename")
-        self.content_type = data.get("content_type")
-        self.metadata_type = data.get("metadata").get("type")
+import asyncio
 
-    @property
-    def url(self) -> str:
-        base_url = self._state.api_info["features"]["autumn"]["url"]
-
-        return f"{base_url}/{self.tag}/{self.id}"
+__all__ = ["Reply", "Message"]
 
 
+@attr.define(hash=False, kw_only=True, weakref_slot=False)
 class Reply:
-    def __init__(self, message: Message, mention: Optional[bool] = True):
-        self.message: Message = message
-        self.mention: Optional[bool] = mention
+    """A reply to a message."""
+
+    message: Message = attr.ib(eq=False, hash=False, repr=True)
+    """The message that this reply is replying to."""
+
+    mention: Optional[bool] = attr.ib(eq=False, hash=False, repr=True)
+    """Whether or not the reply should mention the author of the message."""
 
     def __repr__(self):
         return "<Reply message={0!r} mention={1}>".format(self.message, self.mention)
 
 
-class File:
-    """Respresents a file about to be uploaded to revolt
+@attr.define(hash=True, kw_only=True, weakref_slot=False)
+class Message(objects.Unique):
+    """A message in a channel."""
 
-    Parameters
-    -----------
-    file: Union[str, bytes]
-        The name of the file or the content of the file in bytes, text files will be need to be encoded
-    filename: Optional[str]
-        The filename of the file when being uploaded, this will default to the name of the file if one exists
-    spoiler: bool
-        Determines if the file will be a spoiler, this prefexes the filename with `SPOILER_`
-    """
+    app: traits.RESTAware = attr.ib(eq=False, hash=False, repr=True)
+    """The application instance."""
 
-    def __init__(
-        self,
-        file: Union[str, bytes],
-        *,
-        filename: Optional[str] = None,
-        spoiler: bool = False,
-    ):
-        if isinstance(file, str):
-            self.f = open(file, "rb")
-        elif isinstance(file, bytes):
-            self.f = io.BytesIO(file)
+    id: objects.Object = attr.ib(eq=False, hash=False, repr=True)
+    """The ID of the message."""
 
-        if filename is None and isinstance(file, str):
-            filename = self.f.name
+    channel: MessageableChannel = attr.ib(eq=False, hash=False, repr=True)
+    """The channel that the message is in."""
 
-        if spoiler or (filename and filename.startswith("SPOILER_")):
-            self.spoiler = True
-        else:
-            self.spoiler = False
+    author_id: objects.Object = attr.ib(eq=False, hash=False, repr=True)
+    """The author of the message."""
 
-        if self.spoiler and (filename and not filename.startswith("SPOILER_")):
-            filename = f"SPOILER_{filename}"
+    replies: list[Reply] = attr.ib(eq=False, hash=False, repr=True)
+    """The replies to this message."""
 
-        self.filename = filename
-
-
-class Message(Unique):
-    def __init__(
-        self, state: ConnectionState, channel: MessageableChannel, data: MessagePayload
-    ):
-        self._state: ConnectionState = state
-        self.id = data.get("_id")
-        self.channel = channel
-        self.content = data.get("content")
-        self.author_id = data.get("author")
-        self.replies = [state.get_message(r) for r in data.get("replies", [])]
-        self.attachments = [Attachment(state, a) for a in data.get("attachments", [])]
-
-    def __repr__(self) -> str:
-        name = self.__class__.__name__
-        return f"<{name} id={self.id} channel={self.channel!r} author={self.author!r}"
+    attachments: list[Attachment] = attr.ib(eq=False, hash=False, repr=True)
+    """The attachments to this message."""
 
     @property
     def server(self) -> str:
+        """The server that the message is in."""
         return self.channel.server
 
     @property
     def author(self) -> PartialUser:
-        return self._state.get_user(self.author_id) or PartialUser(self.author_id)
+        """The author of the message."""
+        return self.app.cache.get_user(self.author_id)
 
     async def reply(
         self,
@@ -118,6 +75,23 @@ class Message(Unique):
         delete_after: int = None,
         nonce=None,
     ):
+        """Reply to the message.
+
+        Parameters
+        ----------
+        content : str, optional
+            The content of the reply.
+        file : File, optional
+            The file to attach to the reply.
+        files : list[File], optional
+            The files to attach to the reply.
+        mention : bool, optional
+            Whether or not the reply should mention the author of the message.
+        delete_after : int, optional
+            The number of seconds to wait before deleting the reply.
+        nonce : int, optional
+            The nonce to use for the reply.
+        """
         return await self.channel.send(
             content,
             file=file,
@@ -128,22 +102,37 @@ class Message(Unique):
         )
 
     async def delete(self, *, delay: Optional[float] = None) -> None:
+        """Delete the message.
+
+        Parameters
+        ----------
+        delay : Optional[float], optional
+            Delay before deleting the message, by default None
+        """
         if delay is not None:
 
             async def delete(delay: float):
                 await asyncio.sleep(delay)
-                await self._state.http.delete_message(self.channel.id, self.id)
+                await self.app.rest.delete_message(self.channel, self)
 
             asyncio.create_task(delete(delay))
         else:
-            await self._state.http.delete_message(self.channel.id, self.id)
+            await self.app.rest.delete_message(self.channel, self)
 
     async def edit(self, content: str) -> Message:
-        await self._state.http.edit_message(self.channel.id, self.id, content=content)
+        """Edit the message.
+
+        Parameters
+        ----------
+        content : str
+            The new content of the message.
+
+        Returns
+        -------
+        Message
+            The edited message.
+        """
+        await self.app.rest.edit_message(self.channel, self, content=content)
         self.content = content
 
         return self
-
-    def _update(self, data: MessageUpdate) -> None:
-        if "content" in data["data"]:
-            self.content = data.get("data").get("content")

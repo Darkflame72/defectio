@@ -38,9 +38,18 @@ class Object(str):
 class Unique(typing.Protocol):
     """Mixin for a class that enforces uniqueness by a object ID."""
 
-    __slots__: typing.Sequence[str] = "id"
+    __slots__ = ()
 
-    id: Object
+    @property
+    @abc.abstractmethod
+    def id(self) -> Object:
+        """Return the ID of this entity.
+
+        Returns
+        -------
+        Object
+            The ID of this object.
+        """
 
     @property
     def created_at(self) -> datetime.datetime:

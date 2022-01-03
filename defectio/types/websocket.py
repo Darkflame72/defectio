@@ -2,13 +2,13 @@ from typing import Literal
 from typing import Optional
 from typing import TypedDict
 
-from .payloads import ChannelPayload
-from .payloads import MemberPayload
-from .payloads import MessagePayload
-from .payloads import RelationType
-from .payloads import RolePayload
-from .payloads import ServerPayload
-from .payloads import UserPayload
+from defectio.types.base import ChannelPayload
+from .base import MemberPayload
+from .base import MessagePayload
+from .base import RelationType
+from .base import RolePayload
+from .base import ServerPayload
+from .base import UserPayload
 
 
 class ErrorPayload(TypedDict):

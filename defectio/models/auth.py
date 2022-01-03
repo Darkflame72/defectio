@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TypedDict
 from typing import Union
+import attr
 
 __all__ = ["Auth"]
 
@@ -10,13 +11,15 @@ UserAuthHeader = TypedDict("BotAuthHeder", {"x-user-token": str})
 WebsocketAuthPayload = TypedDict("BotAuthHeder", {"x-user-token": str})
 
 
+@attr.define(hash=False, kw_only=True, weakref_slot=False)
 class Auth:
+    """Authentication details for the api."""
 
-    __slots__ = ("token", "bot")
+    token: str = attr.ib(eq=False, hash=False, repr=True)
+    """The token to use for authentication."""
 
-    def __init__(self, data: str, bot: bool = True):
-        self.token = str(data)
-        self.bot = bot
+    bot: bool = attr.ib(eq=False, hash=False, repr=True)
+    """If the token is for a bot."""
 
     @property
     def headers(self) -> Union[BotAuthHeader, UserAuthHeader]:

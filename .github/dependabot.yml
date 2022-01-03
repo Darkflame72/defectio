@@ -4,15 +4,31 @@ updates:
       directory: "/"
       schedule:
           interval: daily
+      assignees:
+          - Darkflame72
+      reviewers:
+          - Darkflame72
     - package-ecosystem: pip
       directory: "/.github/workflows"
       schedule:
           interval: daily
+      assignees:
+          - Darkflame72
+      reviewers:
+          - Darkflame72
     - package-ecosystem: pip
       directory: "/docs"
       schedule:
           interval: daily
+      assignees:
+          - Darkflame72
+      reviewers:
+          - Darkflame72
     - package-ecosystem: pip
       directory: "/"
       schedule:
           interval: daily
+      assignees:
+          - Darkflame72
+      reviewers:
+          - Darkflame72

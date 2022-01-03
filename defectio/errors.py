@@ -1,160 +1,320 @@
+"""Exceptions and warnings that can be thrown by this library."""
 from __future__ import annotations
 
-from typing import Any
-from typing import Optional
-from typing import TYPE_CHECKING
-from typing import Union
+__all__: typing.List[str] = [
+    "DefectioError",
+    "DefectioWarning",
+    "DefectioInterrupt",
+    "ComponentStateConflictError",
+    "UnrecognisedEntityError",
+    "NotFoundError",
+    "RateLimitedError",
+    "RateLimitTooLongError",
+    "UnauthorizedError",
+    "ForbiddenError",
+    "BadRequestError",
+    "HTTPError",
+    "HTTPResponseError",
+    "ClientHTTPResponseError",
+    "InternalServerError",
+    "GatewayConnectionError",
+    "GatewayServerClosedConnectionError",
+    "GatewayError",
+    "MissingIntentWarning",
+    "MissingIntentError",
+    "BulkDeleteError",
+    "VoiceError",
+]
 
-if TYPE_CHECKING:
-    from aiohttp import ClientResponse
+import http
+import typing
 
-    try:
-        from requests import Response
-
-        _ResponseType = Union[ClientResponse, Response]
-    except ModuleNotFoundError:
-        _ResponseType = ClientResponse
+import attr
 
 
-class DefectioException(Exception):
-    """Base exception class for defectio
+@attr.define(auto_exc=True, repr=False, init=False, weakref_slot=False)
+class DefectioError(RuntimeError):
+    """Base for an error raised by this API.
 
-    Ideally speaking, this could be caught to handle any exceptions raised from this library.
+    Any exceptions should derive from this.
+
+    .. warning
+        You should never initialize this exception directly.
     """
 
-    pass
 
+@attr.define(auto_exc=True, repr=False, init=False, weakref_slot=False)
+class DefectioWarning(RuntimeWarning):
+    """Base for a warning raised by this API.
 
-class ClientException(DefectioException):
-    """Exception that's raised when an operation in the :class:`Client` fails.
+    Any warnings should derive from this.
 
-    These are usually for exceptions that happened due to user input.
+    .. warning
+        You should never initialize this warning directly.
     """
 
-    pass
+
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class DefectioInterrupt(KeyboardInterrupt, DefectioError):
+    """Exception raised when a kill signal is handled internally."""
+
+    signum: int = attr.field()
+    """The signal number that was raised."""
+
+    signame: str = attr.field()
+    """The signal name that was raised."""
 
 
-class GatewayNotFound(DefectioException):
-    """Exception that's raised when the gateway is not found."""
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class ComponentStateConflictError(DefectioError):
+    """Exception thrown when an action cannot be executed in the component's current state.
 
-    pass
+    Dependent on context this will be thrown for components which are already
+    running or haven't been started yet.
+    """
+
+    reason: str = attr.field()
+    """A string to explain the issue."""
+
+    def __str__(self) -> str:
+        return self.reason
 
 
-def _flatten_error_dict(d: dict[str, Any], key: str = "") -> dict[str, str]:
-    items: list[tuple[str, str]] = []
-    for k, v in d.items():
-        new_key = key + "." + k if key else k
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class UnrecognisedEntityError(DefectioError):
+    """An exception thrown when an unrecognised entity is found."""
 
-        if isinstance(v, dict):
+    reason: str = attr.field()
+    """A string to explain the issue."""
+
+    def __str__(self) -> str:
+        return self.reason
+
+
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class GatewayError(DefectioError):
+    """A base exception type for anything that can be thrown by the Gateway."""
+
+    reason: str = attr.field()
+    """A string to explain the issue."""
+
+    def __str__(self) -> str:
+        return self.reason
+
+
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class GatewayConnectionError(GatewayError):
+    """An exception thrown if a connection issue occurs."""
+
+    def __str__(self) -> str:
+        return f"Failed to connect to server: {self.reason!r}"
+
+
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class HTTPError(DefectioError):
+    """Base exception raised if an HTTP error occurs while making a request."""
+
+    message: str = attr.field()
+    """The error message."""
+
+
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class HTTPResponseError(HTTPError):
+    """Base exception for an erroneous HTTP response."""
+
+    url: str = attr.field()
+    """The URL that produced this error message."""
+
+    status: http.HTTPStatus = attr.field()
+    """The HTTP status code for the response."""
+
+    raw_body: typing.Any = attr.field()
+    """The response body."""
+
+    message: str = attr.field(default="")
+    """The error message."""
+
+    code: int = attr.field(default=0)
+    """The error code."""
+
+    def __str__(self) -> str:
+        name = self.status.name.replace("_", " ").title()
+        name_value = f"{name} {self.status.value}"
+
+        if self.code:
+            code_str = f" ({self.code})"
+        else:
+            code_str = ""
+
+        if self.message:
+            body = self.message
+        else:
             try:
-                _errors: list[dict[str, Any]] = v["_errors"]
-            except KeyError:
-                items.extend(_flatten_error_dict(v, new_key).items())
-            else:
-                items.append((new_key, " ".join(x.get("message", "") for x in _errors)))
-        else:
-            items.append((new_key, v))
+                body = self.raw_body.decode("utf-8")
+            except (AttributeError, UnicodeDecodeError, TypeError, ValueError):
+                body = str(self.raw_body)
 
-    return dict(items)
+        chomped = len(body) > 200
+
+        return f"{name_value}:{code_str} '{body[:200]}{'...' if chomped else ''}' for {self.url}"
 
 
-class HTTPException(DefectioException):
-    """Exception that's raised when an HTTP request operation fails.
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class ClientHTTPResponseError(HTTPResponseError):
+    """Base exception for an erroneous HTTP response that is a client error.
 
-    Attributes
-    ------------
-    response: :class:`aiohttp.ClientResponse`
-        The response of the failed HTTP request. This is an
-        instance of :class:`aiohttp.ClientResponse`. In some cases
-        this could also be a :class:`requests.Response`.
-
-    text: :class:`str`
-        The text of the error. Could be an empty string.
-    status: :class:`int`
-        The status code of the HTTP request.
-    code: :class:`int`
-        The Revolt specific error code for the failure.
+    All exceptions derived from this base should be treated as 4xx client
+    errors when encountered.
     """
 
-    def __init__(
-        self, response: _ResponseType, message: Optional[Union[str, dict[str, Any]]]
-    ):
-        self.response: _ResponseType = response
-        self.status: int = response.status  # type: ignore
-        self.code: int
-        self.text: str
-        if isinstance(message, dict):
-            self.code = message.get("code", 0)
-            base = message.get("message", "")
-            errors = message.get("errors")
-            if errors:
-                errors = _flatten_error_dict(errors)
-                helpful = "\n".join("In %s: %s" % t for t in errors.items())
-                self.text = base + "\n" + helpful
-            else:
-                self.text = base
-        else:
-            self.text = message or ""
-            self.code = 0
 
-        fmt = "{0.status} {0.reason} (error code: {1})"
-        if len(self.text):
-            fmt += ": {2}"
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class BadRequestError(ClientHTTPResponseError):
+    """Raised when you send an invalid request somehow."""
 
-        super().__init__(fmt.format(self.response, self.code, self.text))
+    status: http.HTTPStatus = attr.field(
+        default=http.HTTPStatus.BAD_REQUEST, init=False
+    )
+    """The HTTP status code for the response."""
 
 
-class NotFound(HTTPException):
-    """Exception that's raised for when status code 404 occurs.
-    Subclass of :exc:`HTTPException`
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class UnauthorizedError(ClientHTTPResponseError):
+    """Raised when you are not authorized to access a specific resource."""
+
+    status: http.HTTPStatus = attr.field(
+        default=http.HTTPStatus.UNAUTHORIZED, init=False
+    )
+    """The HTTP status code for the response."""
+
+
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class ForbiddenError(ClientHTTPResponseError):
+    """Raised when you are not allowed to access a specific resource.
+
+    This means you lack the permissions to do something, either because of
+    permissions set in a guild, or because your application is not whitelisted
+    to use a specific endpoint.
     """
 
-    pass
+    status: http.HTTPStatus = attr.field(default=http.HTTPStatus.FORBIDDEN, init=False)
+    """The HTTP status code for the response."""
 
 
-class Forbidden(HTTPException):
-    """Exception that's raised for when status code 403 occurs.
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class NotFoundError(ClientHTTPResponseError):
+    """Raised when something is not found."""
 
-    Subclass of :exc:`HTTPException`
+    status: http.HTTPStatus = attr.field(default=http.HTTPStatus.NOT_FOUND, init=False)
+    """The HTTP status code for the response."""
+
+
+@attr.define(auto_exc=True, kw_only=True, repr=False, weakref_slot=False)
+class RateLimitedError(ClientHTTPResponseError):
+    """Raised when a non-global rate limit that cannot be handled occurs.
+
+    If you receive one of these, you should NOT try again until the given
+    time has passed, either discarding the operation you performed, or waiting
+    until the given time has passed first. Note that it may still be valid to
+    send requests with different attributes in them.
+
+    A use case for this by Discord appears to be to stop abuse from bots that
+    change channel names, etc, regularly. This kind of action allegedly causes
+    a fair amount of overhead internally for Discord. In the case you encounter
+    this, you may be able to send different requests that manipulate the same
+    entities (in this case editing the same channel) that do not use the same
+    collection of attributes as the previous request.
     """
 
-    pass
+    retry_after: float = attr.field()
+    """How many seconds to wait before you can reuse the route with the specific request."""
+
+    status: http.HTTPStatus = attr.field(
+        default=http.HTTPStatus.TOO_MANY_REQUESTS, init=False
+    )
+    """The HTTP status code for the response."""
+
+    message: str = attr.field(init=False)
+    """The error message."""
+
+    @message.default
+    def _(self) -> str:
+        return f"You are being rate-limited for {self.retry_after:,} seconds on route {self.route}. Please slow down!"
 
 
-class RevoltServerError(HTTPException):
-    """Exception that's raised for when a 500 range status code occurs.
+@attr.define(auto_exc=True, kw_only=True, repr=False, weakref_slot=False)
+class RateLimitTooLongError(HTTPError):
+    """Internal error raised if the wait for a rate limit is too long.
 
-    Subclass of :exc:`HTTPException`.
+    This is similar to `asyncio.TimeoutError` in the way that it is used,
+    but this will be raised pre-emptively and immediately if the period
+    of time needed to wait is greater than a user-defined limit.
+
+    This will almost always be route-specific. If you receive this, it is
+    unlikely that performing the same call for a different channel/guild/user
+    will also have this rate limit.
     """
 
-    pass
+    # route: routes.CompiledRoute = attr.field()
+    """The route that produced this error."""
+
+    retry_after: float = attr.field()
+    """How many seconds to wait before you can retry this specific request."""
+
+    max_retry_after: float = attr.field()
+    """How long the client is allowed to wait for at a maximum before raising."""
+
+    reset_at: float = attr.field()
+    """UNIX timestamp of when this limit will be lifted."""
+
+    limit: int = attr.field()
+    """The maximum number of calls per window for this rate limit."""
+
+    period: float = attr.field()
+    """How long the rate limit window lasts for from start to end."""
+
+    message: str = attr.field(init=False)
+    """The error message."""
+
+    @message.default
+    def _(self) -> str:
+        return (
+            "The request has been rejected, as you would be waiting for more than"
+            f"the max retry-after ({self.max_retry_after}) on route {self.route}"
+        )
+
+    # This may support other types of limits in the future, this currently
+    # exists to be self-documenting to the user and for future compatibility
+    # only.
+    @property
+    def remaining(self) -> typing.Literal[0]:
+        """The number of requests remaining in this window.
+
+        This will always be `0` symbolically.
+
+        Returns
+        -------
+        builtins.int
+            The number of requests remaining. Always `0`.
+        """  # noqa: D401 - Imperative mood
+        return 0
+
+    def __str__(self) -> str:
+        return self.message
 
 
-class InvalidData(ClientException):
-    """Exception that's raised when the library encounters unknown
+@attr.define(auto_exc=True, repr=False, weakref_slot=False)
+class InternalServerError(HTTPResponseError):
+    """Base exception for an erroneous HTTP response that is a server error.
 
-    or invalid data from Revolt.
+    All exceptions derived from this base should be treated as 5xx server
+    errors when encountered. If you get one of these, it is not your fault!
     """
 
-    pass
 
+@attr.define(auto_exc=True, repr=False, init=False, weakref_slot=False)
+class MissingIntentWarning(DefectioWarning):
+    """Warning raised when subscribing to an event that cannot be fired.
 
-class InvalidArgument(ClientException):
-    """Exception that's raised when an argument to a function
-    is invalid some way (e.g. wrong value or wrong type).
-
-    This could be considered the analogous of ``ValueError`` and
-    ``TypeError`` except inherited from :exc:`ClientException` and thus
-    :exc:`RevoltException`.
+    This is caused by your application missing certain intents.
     """
-
-    pass
-
-
-class LoginFailure(ClientException):
-    """Exception that's raised when the :meth:`Client.login` function
-    fails to log you in from improper credentials or some other misc.
-    failure.
-    """
-
-    pass

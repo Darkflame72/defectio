@@ -1,35 +1,24 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+import attr
 
-from defectio.models.objects import Unique
+from defectio.models import objects
+from defectio.models.user import PartialUser
 
-from . import abc
-
-
-if TYPE_CHECKING:
-    from ..state import ConnectionState
-    from ..types.payloads import MemberPayload
-    from defectio.types.websocket import ServerMemberUpdate
+__all__ = ["PartialMember", "Member"]
 
 
-class PartialMember(abc.Messageable, Unique):
-    def __init__(self, id: str, state: ConnectionState):
-        self._state = state
-        self.id = id
+@attr.define(hash=True, kw_only=True, weakref_slot=False)
+class PartialMember(PartialUser):
+    """A partial member."""
 
-    def __repr__(self) -> str:
-        return f"<PartialMember {self.id}>"
+    pass
 
 
+@attr.define(hash=True, kw_only=True, weakref_slot=False)
 class Member(PartialMember):
-    def __init__(self, data: MemberPayload, state: ConnectionState):
-        self._state = state
-        self.nickname = data.get("nickname")
-        self.id = data.get("_id").get("user")
+    """A member."""
 
-    def _update(self, data: ServerMemberUpdate):
-        self.nickname = data.get("nickname", self.nickname)
-
-    def __repr__(self) -> str:
-        return f"<Member id={self.id} nickname={self.nickname}>"
+    nickname: Optional[str] = attr.ib(eq=False, hash=False, repr=True)
+    """The nickname of the member."""
