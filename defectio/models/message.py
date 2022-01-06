@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import attr
 from typing import TYPE_CHECKING
+
+import attr
 from defectio.models import objects
 from defectio.models.attachmet import Attachment
 
@@ -43,13 +44,16 @@ class Message(objects.Unique):
     id: objects.Object = attr.ib(eq=False, hash=False, repr=True)
     """The ID of the message."""
 
-    channel: MessageableChannel = attr.ib(eq=False, hash=False, repr=True)
+    content: str = attr.ib(eq=False, hash=False, repr=True)
+    """The content of the message."""
+
+    channel_id: objects.Object = attr.ib(eq=False, hash=False, repr=True)
     """The channel that the message is in."""
 
     author_id: objects.Object = attr.ib(eq=False, hash=False, repr=True)
     """The author of the message."""
 
-    replies: list[Reply] = attr.ib(eq=False, hash=False, repr=True)
+    replies_ids: list[objects.Object] = attr.ib(eq=False, hash=False, repr=True)
     """The replies to this message."""
 
     attachments: list[Attachment] = attr.ib(eq=False, hash=False, repr=True)

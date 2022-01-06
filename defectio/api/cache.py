@@ -1,13 +1,14 @@
 from copy import copy
 from typing import Optional
 from typing import Sequence
+from collections import deque
 
 from defectio import config
 from defectio.base.cache import Cache as BaseCache
 from defectio.base.cache import MutableCache as BaseMutableCache
-from defectio.models import OwnUser
 from defectio.models import Message
 from defectio.models import objects
+from defectio.models import OwnUser
 from defectio.models import PartialUser
 from defectio.models import Server
 from defectio.models import User
@@ -41,7 +42,7 @@ class Cache(BaseCache):
     _servers: dict[objects.Object, Server]
     _members: dict[objects.Object, Member]
     _settings: config.CacheSettings
-    _messages: dict[objects.Object, Message]
+    _messages: deque[Message]
 
     def __init__(self, settings: config.CacheSettings) -> None:
         """
@@ -63,7 +64,7 @@ class Cache(BaseCache):
         self._channels = {}
         self._servers = {}
         self._members = {}
-        self._messages = {}
+        self._messages = 300
 
     async def clear(self) -> None:
         if self._settings.components == config.CacheComponents.NONE:
@@ -110,9 +111,14 @@ class Cache(BaseCache):
     async def get_message(
         self, message: objects.ObjectishOr[Message], /
     ) -> Optional[Message]:
-        return self._messages.get(str(message), None)
+        found = [
+            message
+            for message in self._messages
+            if message.id == objects.Object(message)
+        ]
+        return found[0] if found else None
 
-    async def get_messages_view(self) -> dict[objects.Objectish, Message]:
+    async def get_messages_view(self) -> deque[Message]:
         return self._messages
 
 
@@ -134,7 +140,7 @@ class MutableCache(Cache, BaseMutableCache):
     async def update_me(self, user: OwnUser) -> tuple[Optional[OwnUser], OwnUser]:
         old_me = copy.copy(self._me)
         self._me = user
-        return tuple(old_me, self._me)
+        return (old_me, self._me)
 
     async def clear_users(self) -> dict[objects.Object, User]:
         old_users = copy.copy(self._users)
@@ -154,8 +160,10 @@ class MutableCache(Cache, BaseMutableCache):
         self, user: PartialUser, /
     ) -> tuple[Optional[PartialUser], PartialUser]:
         old_user = self._users.get(objects.Object(user), None)
+        if old_user is None:
+            return
         self._users[objects.Object(user)] = user
-        return tuple(old_user, self._users[objects.Object(user)])
+        return (old_user, self._users[objects.Object(user)])
 
     async def clear_channels(self) -> dict[objects.Object, PartialChannel]:
         old_channels = self._channels
@@ -176,7 +184,7 @@ class MutableCache(Cache, BaseMutableCache):
     ) -> tuple[Optional[PartialChannel], PartialChannel]:
         old_channel = self._channels.get(objects.Object(channel), None)
         self._channels[objects.Object(channel)] = channel
-        return tuple(old_channel, self._channels[objects.Object(channel)])
+        return (old_channel, self._channels[objects.Object(channel)])
 
     async def clear_servers(self) -> dict[objects.Object, Server]:
         old_servers = self._servers
@@ -199,7 +207,7 @@ class MutableCache(Cache, BaseMutableCache):
     ) -> tuple[Server, Server]:
         old_server = self._servers.get(objects.Object(server), None)
         self._servers[objects.Object(server)] = server
-        return tuple(old_server, self._servers[objects.Object(server)])
+        return (old_server, self._servers[objects.Object(server)])
 
     async def clear_members(self) -> dict[objects.Object, Member]:
         old_members = self._members
@@ -218,11 +226,11 @@ class MutableCache(Cache, BaseMutableCache):
     async def update_member(self, member: Member, /) -> tuple[Optional[Member], Member]:
         old_member = self._members.get(objects.Object(member), None)
         self._members[objects.Object(member)] = member
-        return tuple(old_member, self._members[objects.Object(member)])
+        return (old_member, self._members[objects.Object(member)])
 
-    async def clear_messages(self) -> dict[objects.Object, Message]:
+    async def clear_messages(self) -> deque[Message]:
         old_messages = self._messages
-        self._messages = {}
+        self._messages = deque(maxlen=self._max_messages)
         return old_messages
 
     async def delete_message(
@@ -232,11 +240,14 @@ class MutableCache(Cache, BaseMutableCache):
         return old_message
 
     async def set_message(self, message: Message, /) -> None:
-        self._messages[objects.Object(message)] = message
+        # index = self._messages. (message)
+        # self._messages[] = message
+        pass
 
     async def update_message(
         self, message: Message, /
     ) -> tuple[Optional[Message], Message]:
-        old_message = self._messages.get(objects.Object(message), None)
-        self._messages[objects.Object(message)] = message
-        return tuple(old_message, self._messages[objects.Object(message)])
+        # old_message = self._messages.get(objects.Object(message), None)
+        # self._messages[objects.Object(message)] = message
+        # return (old_message, self._messages[objects.Object(message)])
+        pass

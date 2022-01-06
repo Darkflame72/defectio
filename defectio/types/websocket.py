@@ -3,7 +3,8 @@ from typing import Optional
 from typing import TypedDict
 
 from defectio.types.base import ChannelPayload
-from .base import MemberPayload
+
+from .base import AttachmentPayload, Edited, Embed, MemberPayload
 from .base import MessagePayload
 from .base import RelationType
 from .base import RolePayload
@@ -39,7 +40,16 @@ class ReadyPayload(TypedDict):
 
 
 class MessagePayload(MessagePayload):
-    type: Literal["Message"]
+    _id: str
+    nonce: Optional[str]
+    channel: str
+    author: str
+    content: str
+    attachments: list[AttachmentPayload]
+    edited: Edited
+    embeds: list[Embed]
+    mentions: list[str]
+    replies: list[str]
 
 
 class PartialMessagePayload(MessagePayload, total=False):

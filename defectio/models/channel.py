@@ -1,10 +1,12 @@
 from __future__ import annotations
-from typing import Optional, Union, TYPE_CHECKING
+
+from typing import Optional
+from typing import TYPE_CHECKING
+from typing import Union
 
 import attr
-
-from defectio.models.base import Messageable
 from defectio.models import objects
+from defectio.models.base import Messageable
 
 if TYPE_CHECKING:
     from defectio.models.permission import ChannelPermission
@@ -65,8 +67,12 @@ class ServerChannel(PartialChannel):
 
 
 @attr.define(hash=True, kw_only=True, weakref_slot=False)
-class TextChannel(Messageable, ServerChannel):
+class TextChannel(ServerChannel):
     """Text channel."""
+
+    app: objects.Object = attr.ib(hash=False, repr=True)
+
+    id: objects.Object = attr.ib(hash=True, repr=True)
 
     server_id: objects.Object = attr.ib(eq=False, hash=False, repr=True)
     """The server id s the channel belongs to."""

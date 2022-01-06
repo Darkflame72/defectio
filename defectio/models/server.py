@@ -1,12 +1,13 @@
 from __future__ import annotations
+
 from typing import Optional
+from typing import TYPE_CHECKING
 
 import attr
-from typing import TYPE_CHECKING
-from defectio.models.colour import Colour
-from defectio.models import objects
 from defectio import traits
+from defectio.models import objects
 from defectio.models.attachmet import Attachment
+from defectio.models.colour import Colour
 from defectio.models.permission import ChannelPermission
 from defectio.models.permission import ServerPermission
 from defectio.models.user import PartialUser

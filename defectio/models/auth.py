@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TypedDict
 from typing import Union
+
 import attr
 
 __all__ = ["Auth"]

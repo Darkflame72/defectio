@@ -4,6 +4,7 @@ import io
 import os
 from typing import Optional
 from typing import Union
+
 import attr
 
 __all__ = ["File"]

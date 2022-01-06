@@ -126,12 +126,6 @@ class CacheAware(typing.Protocol):
 
     @property
     def cache(self) -> cache_.Cache:
-        """Return the immutable cache implementation for this object.
-        Returns
-        -------
-        hikari.api.cache.Cache
-            The cache component for this object.
-        """
         raise NotImplementedError
 
 
@@ -143,26 +137,12 @@ class Runnable(typing.Protocol):
 
     @property
     def is_alive(self) -> bool:
-        """Check whether the application is running or not.
-        This is useful as some functions might raise
-        `hikari.errors.ComponentStateConflictError` if this is
-        `builtins.False`.
-        Returns
-        -------
-        builtins.bool
-            Whether the bot is running or not.
-        """
         raise NotImplementedError
 
     async def close(self) -> None:
         """Kill the application by shutting all components down."""
 
     async def join(self) -> None:
-        """Wait indefinitely until the application closes.
-        This can be placed in a task and cancelled without affecting the
-        application runtime itself. Any exceptions raised by shards will be
-        propagated to here.
-        """
         raise NotImplementedError
 
     def run(self) -> None:

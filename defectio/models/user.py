@@ -1,10 +1,11 @@
 """Application and entities that are used to describe Users on Discord."""
-
 from __future__ import annotations
 
-from defectio.types.base import RelationType, StatusPayload, StatusType
-from defectio.models.base import Messageable
 from defectio.models.attachmet import Attachment
+from defectio.models.base import Messageable
+from defectio.types.base import RelationType
+from defectio.types.base import StatusPayload
+from defectio.types.base import StatusType
 
 __all__ = [
     "Status",
@@ -145,10 +146,8 @@ class BaseUser(PartialUser):
     relationships: list[Relationship] = attr.field(eq=False, hash=False, repr=True)
     """Relationships the user has."""
 
-    @property
-    def online(self) -> bool:
-        """If the user is online."""
-        return self.status.online
+    online: bool = attr.ib(eq=False, hash=False, repr=True, default=False)
+    """Whether the user is online or not."""
 
     # TODO
     # def mentioned_in(self, message: Message) -> bool:

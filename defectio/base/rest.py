@@ -11,7 +11,6 @@ from defectio.models.api_info import ApiInfo
 from defectio.models.attachmet import Attachment
 from defectio.models.channel import DMChannel
 from defectio.models.channel import GroupChannel
-from defectio.models.server import Invite
 from defectio.models.channel import PartialChannel
 from defectio.models.channel import ServerChannel
 from defectio.models.channel import TextChannel
@@ -23,11 +22,9 @@ from defectio.models.permission import Permission
 from defectio.models.server import Ban
 from defectio.models.server import Category
 from defectio.models.server import Colour
+from defectio.models.server import Invite
 from defectio.models.server import Role
 from defectio.models.server import Server
-
-# from defectio.models.server import SystemMessages
-# from defectio.models.user import Bot
 from defectio.models.user import OwnUser
 from defectio.models.user import PartialUser
 from defectio.models.user import Profile
@@ -38,6 +35,8 @@ from defectio.types.payloads import JoinVoice
 from defectio.types.payloads import LoginPayload
 from defectio.types.payloads import RelationType
 from defectio.types.payloads import SessionPayload
+# from defectio.models.server import SystemMessages
+# from defectio.models.user import Bot
 
 # TODO
 SystemMessages = None

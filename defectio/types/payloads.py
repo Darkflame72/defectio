@@ -6,15 +6,13 @@ from typing import Type
 from typing import TYPE_CHECKING
 from typing import TypedDict
 
-from defectio.types.base import (
-    AttachmentPayload,
-    MemberIdPayload,
-    MemberPayload,
-    MessagePayload,
-    RelationType,
-    ServerPayload,
-    UserPayload,
-)
+from defectio.types.base import AttachmentPayload
+from defectio.types.base import MemberIdPayload
+from defectio.types.base import MemberPayload
+from defectio.types.base import MessagePayload
+from defectio.types.base import RelationType
+from defectio.types.base import ServerPayload
+from defectio.types.base import UserPayload
 
 
 ChannelType = Literal[

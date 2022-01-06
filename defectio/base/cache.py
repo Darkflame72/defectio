@@ -2,9 +2,9 @@ import abc
 from typing import Optional
 from typing import Sequence
 
-from defectio.models import OwnUser
 from defectio.models import Message
 from defectio.models import objects
+from defectio.models import OwnUser
 from defectio.models import PartialUser
 from defectio.models import Server
 from defectio.models import User

@@ -1,6 +1,6 @@
 from typing import Literal
-from typing import TypedDict
 from typing import Optional
+from typing import TypedDict
 
 
 ChannelType = Literal[

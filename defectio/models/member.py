@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional
-import attr
+from typing import Optional
+from typing import TYPE_CHECKING
 
+import attr
 from defectio.models import objects
 from defectio.models.user import PartialUser
 
@@ -20,5 +21,8 @@ class PartialMember(PartialUser):
 class Member(PartialMember):
     """A member."""
 
-    nickname: Optional[str] = attr.ib(eq=False, hash=False, repr=True)
+    user_id: objects.Object = attr.ib(eq=False, hash=False, repr=True)
+    """The ID of the user."""
+
+    nickname: Optional[str] = attr.ib(eq=False, hash=False, repr=True, default=None)
     """The nickname of the member."""
