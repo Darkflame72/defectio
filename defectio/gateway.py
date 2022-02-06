@@ -8,6 +8,8 @@ from typing import Union
 from .backoff import ExponentialBackoff
 
 import aiohttp
+import aiohttp.http_websocket
+
 import orjson as json
 from defectio.errors import LoginFailure
 
