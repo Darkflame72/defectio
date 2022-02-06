@@ -25,7 +25,6 @@ from .models import User
 from .models import VoiceChannel
 from .models.apiinfo import ApiInfo
 from .models.auth import Auth
-from .models import abc
 from .models.channel import DMChannel
 from .models.channel import GroupChannel
 from .models.channel import TextChannel
