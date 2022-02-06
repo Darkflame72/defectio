@@ -776,7 +776,7 @@ class ConnectionState:
         -------
         Message
             The message created.
-        """
+        """      
         return Message(state=self, channel=channel, data=data)
 
     def create_user(self, data: UserPayload) -> User:

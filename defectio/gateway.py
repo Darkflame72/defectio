@@ -48,9 +48,10 @@ class DefectioWebsocket:
 
     async def close(self) -> None:
         if self._closed:
-            return
-        if not self.ws.closed:
+            return        
+        elif not self.websocket.closed:
             await self.websocket.close()
+            
         self._closed = True
         self.authenticated = False
 

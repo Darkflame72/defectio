@@ -19,3 +19,5 @@ from .user import Status
 from .user import User
 from .colour import Colour, Color
 from .apiinfo import ApiFeatures, ApiInfo
+from .embed import Embed
+
