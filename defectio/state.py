@@ -381,7 +381,6 @@ class ConnectionState:
 
         channel = self._server_channels.get(channel_id)
         if channel is None:
-            print(10)
             channel_data = await self.http.get_channel(channel_id)
             if channel_data is not None:
                 channel = self._add_channel_from_data(channel_data)
@@ -644,7 +643,7 @@ class ConnectionState:
         self.dispatch("raw_channel_update", data)
 
     async def parse_channeldelete(self, data: ChannelDelete) -> None:
-        channel = self.fetch_channel(data["id"])
+        channel = await self.fetch_channel(data["id"])
         if channel is not None:
             channel_copy = copy.copy(channel)
             self._remove_channel(channel)
