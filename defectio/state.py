@@ -25,6 +25,7 @@ from .models import User
 from .models import VoiceChannel
 from .models.apiinfo import ApiInfo
 from .models.auth import Auth
+from .models import abc
 from .models.channel import DMChannel
 from .models.channel import GroupChannel
 from .models.channel import TextChannel
@@ -628,10 +629,17 @@ class ConnectionState:
             self._messages.remove(found)
 
     async def parse_channelcreate(self, data: ChannelCreate) -> None:
-        channel = self._add_channel_from_data(data)
-        server = await self.fetch_server(channel.server)
+        channel = self._add_channel_from_data(data)          
+        server = channel.server
+        
+        # Channel belongs to a non-cached server
+        if data.get("server") is not None and server is None:
+            server = await self.fetch_server(data.get("server"))
+            channel = self._add_channel_from_data(data)
+       
         if channel.id not in server.channel_ids:
             server.channel_ids.append(channel.id)
+            
         self.dispatch("channel_create", channel)
 
     async def parse_channelupdate(self, data: ChannelUpdate) -> None:
