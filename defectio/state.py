@@ -662,8 +662,9 @@ class ConnectionState:
         await self.fetch_channel(data["id"])
         self.dispatch("channel_group_join", data)
 
-    async def parse_channelgroupleave(self, data: ChannelGroupLeave) -> None:
-        channel = self.get_channel(data["channel"])
+    async def parse_channelgroupleave(self, data: ChannelGroupLeave) -> None:       
+        channel = self.get_channel(data["id"])
+               
         if channel is not None:
             channel_copy = copy.copy(channel)
             self._remove_channel(channel)
