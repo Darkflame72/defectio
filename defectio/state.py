@@ -690,10 +690,10 @@ class ConnectionState:
             server._update(data)
             self.dispatch("server_update", old_server, server)
 
-    async def parse_serverdelete(self, data: ServerDelete) -> None:
+    async def parse_serverdelete(self, data: ServerDelete) -> None:        
         server = self.get_server(data["id"])
         if server is not None:
-            self.servers.pop(server.id)
+            self._servers.pop(server.id, None)
             self.dispatch("server_delete", server)
 
     async def parse_servermemberjoin(self, data: ServerMemberJoin) -> None:
