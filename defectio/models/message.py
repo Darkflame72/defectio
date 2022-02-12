@@ -8,6 +8,7 @@ from typing import Union
 
 from defectio.models.user import PartialUser
 
+from .embed import Embed
 from .abc import Messageable
 from .mixins import Hashable
 
@@ -34,6 +35,7 @@ class Attachment:
         base_url = self._state.api_info["features"]["autumn"]["url"]
 
         return f"{base_url}/{self.tag}/{self.id}"
+
 
 class Reply:
     def __init__(self, message: Message, mention: Optional[bool] = True):
@@ -94,6 +96,7 @@ class Message(Hashable):
         self.author_id = data.get("author")
         self.replies = [state.get_message(r) for r in data.get("replies", [])]
         self.attachments = [Attachment(state, a) for a in data.get("attachments", [])]
+        self.embeds = [Embed.from_dict(e) for e in data.get("embeds", [])]
 
     def __repr__(self) -> str:
         name = self.__class__.__name__

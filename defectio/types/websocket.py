@@ -60,6 +60,7 @@ class MessageDelete(TypedDict):
 
 class ChannelCreate(ChannelPayload):
     type: Literal["ChannelCreate"]
+    server: str
 
 
 class PartialChannel(ChannelPayload, total=False):

@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from .channel import DMChannel, TextChannel, GroupChannel
     from defectio.models.message import File
     from .user import ClientUser
+    from ..models.embed import Embed
 
     PartialMessageableChannel = Union[TextChannel, DMChannel]
     MessageableChannel = Union[PartialMessageableChannel, GroupChannel]
@@ -161,6 +162,7 @@ class Messageable(Protocol):
         file: Optional[File] = None,
         files: Optional[list[File]] = None,
         replies: Optional[list[Reply]] = [],
+        embed: Optional[Embed] = None,
         delete_after: int = None,
         nonce=None,
     ):
@@ -180,13 +182,14 @@ class Messageable(Protocol):
                 attachment_ids.append(attach["id"])
         
         replies = [{"id": r.message.id, "mention": r.mention} for r in replies]
+        
         data = await state.http.send_message(
             channel.id,
             content=content,
             attachments=attachment_ids,
-            replies=replies
+            replies=replies,
+            embeds=[embed] if embed is not None else None
         )
-
 
         new_message = state.create_message(channel=channel, data=data)
         if delete_after is not None:

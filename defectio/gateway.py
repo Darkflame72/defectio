@@ -8,6 +8,8 @@ from typing import Union
 from .backoff import ExponentialBackoff
 
 import aiohttp
+import aiohttp.http_websocket
+
 import orjson as json
 from defectio.errors import LoginFailure
 
@@ -46,9 +48,10 @@ class DefectioWebsocket:
 
     async def close(self) -> None:
         if self._closed:
-            return
-        if not self.ws.closed:
+            return        
+        elif not self.websocket.closed:
             await self.websocket.close()
+            
         self._closed = True
         self.authenticated = False
 

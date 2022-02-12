@@ -20,6 +20,9 @@ from .models import Auth
 
 if TYPE_CHECKING:
     import aiohttp
+    
+    from .types.embed import Embed
+    
     from .types.payloads import (
         AccountPayload,
         ApiInfoPayload,
@@ -373,15 +376,24 @@ class DefectioHTTP:
         content: Optional[str] = None,
         attachments: Optional[list[str]] = None,
         replies: Optional[Any] = None,
+        embeds: Optional[list[Embed]] = None
     ) -> MessagePayload:
+        
         path = f"channels/{channel_id}/messages"
         json = {"nonce": ulid.new().str}
+        
         if content is not None:
             json["content"] = content
+            
         if attachments is not None and len(attachments) > 0:
             json["attachments"] = attachments
+            
         if replies is not None:
             json["replies"] = replies
+        
+        if embeds:
+            json["embeds"] = [e.to_dict() for e in embeds]
+               
         return await self.request("POST", path, json=json)
 
     async def get_messages(

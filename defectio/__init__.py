@@ -38,6 +38,7 @@ from .models import (
     Status,
     File,
     Attachment,
+    Embed
 )
 from .models import abc
 from . import utils

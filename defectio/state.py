@@ -381,7 +381,6 @@ class ConnectionState:
 
         channel = self._server_channels.get(channel_id)
         if channel is None:
-            print(10)
             channel_data = await self.http.get_channel(channel_id)
             if channel_data is not None:
                 channel = self._add_channel_from_data(channel_data)
@@ -629,10 +628,17 @@ class ConnectionState:
             self._messages.remove(found)
 
     async def parse_channelcreate(self, data: ChannelCreate) -> None:
-        channel = self._add_channel_from_data(data)
-        server = await self.fetch_server(channel.server)
+        channel = self._add_channel_from_data(data)          
+        server = channel.server
+        
+        # Channel belongs to a non-cached server
+        if data.get("server") is not None and server is None:
+            server = await self.fetch_server(data.get("server"))
+            channel = self._add_channel_from_data(data)
+       
         if channel.id not in server.channel_ids:
             server.channel_ids.append(channel.id)
+            
         self.dispatch("channel_create", channel)
 
     async def parse_channelupdate(self, data: ChannelUpdate) -> None:
@@ -644,7 +650,7 @@ class ConnectionState:
         self.dispatch("raw_channel_update", data)
 
     async def parse_channeldelete(self, data: ChannelDelete) -> None:
-        channel = self.fetch_channel(data["id"])
+        channel = await self.fetch_channel(data["id"])
         if channel is not None:
             channel_copy = copy.copy(channel)
             self._remove_channel(channel)
@@ -656,8 +662,9 @@ class ConnectionState:
         await self.fetch_channel(data["id"])
         self.dispatch("channel_group_join", data)
 
-    async def parse_channelgroupleave(self, data: ChannelGroupLeave) -> None:
-        channel = self.get_channel(data["channel"])
+    async def parse_channelgroupleave(self, data: ChannelGroupLeave) -> None:       
+        channel = self.get_channel(data["id"])
+               
         if channel is not None:
             channel_copy = copy.copy(channel)
             self._remove_channel(channel)
@@ -683,10 +690,10 @@ class ConnectionState:
             server._update(data)
             self.dispatch("server_update", old_server, server)
 
-    async def parse_serverdelete(self, data: ServerDelete) -> None:
+    async def parse_serverdelete(self, data: ServerDelete) -> None:        
         server = self.get_server(data["id"])
         if server is not None:
-            self.servers.pop(server.id)
+            self._servers.pop(server.id, None)
             self.dispatch("server_delete", server)
 
     async def parse_servermemberjoin(self, data: ServerMemberJoin) -> None:
@@ -770,7 +777,7 @@ class ConnectionState:
         -------
         Message
             The message created.
-        """
+        """      
         return Message(state=self, channel=channel, data=data)
 
     def create_user(self, data: UserPayload) -> User:
