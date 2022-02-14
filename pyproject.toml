@@ -28,7 +28,7 @@ msgpack = "^1.0.2"
 aiofiles = ">=0.7,<0.9"
 
 [tool.poetry.dev-dependencies]
-black = "^21.12b0"
+black = "^22.1"
 mypy = "^0.931"
 flake8 = "^4.0.1"
 nox = "^2022.1.7"
