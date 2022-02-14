@@ -54,7 +54,7 @@ reorder-python-imports = "^2.7.1"
 aioresponses = "^0.7.3"
 furo = "^2022.1.2"
 sphinxext-opengraph = "^0.5.1"
-sphinx-copybutton = "^0.4.0"
+sphinx-copybutton = "^0.5.0"
 sphinx-autobuild = "^2021.3.14"
 
 [build-system]
