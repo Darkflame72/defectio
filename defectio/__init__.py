@@ -13,7 +13,7 @@ __title__ = "defectio"
 __author__ = "Darkflame72"
 __license__ = "MIT"
 __copyright__ = "Copyright 2021-present Darkflame72"
-__version__ = "0.2.2a"
+__version__ = "0.2.3a"
 
 __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 
@@ -38,7 +38,7 @@ from .models import (
     Status,
     File,
     Attachment,
-    Embed
+    Embed,
 )
 from .models import abc
 from . import utils
