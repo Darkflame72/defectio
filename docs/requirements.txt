@@ -1,6 +1,6 @@
 sphinx==4.4.0
 sphinxcontrib_trio==1.1.2
-furo==2022.2.14.1
+furo==2022.2.23
 sphinxext-opengraph==0.6.1
 sphinx-copybutton==0.5.0
 aiohttp==3.8.1
