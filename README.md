@@ -56,6 +56,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/jafreli"><img src="https://avatars.githubusercontent.com/u/31709372?v=4?s=100" width="100px;" alt=""/><br /><sub><b>jafreli</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/commits?author=jafreli" title="Code">💻</a></td>
     <td align="center"><a href="https://dark42ed.cf/"><img src="https://avatars.githubusercontent.com/u/74568473?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dark42ed</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/commits?author=Dark42ed" title="Documentation">📖</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/FabrizioCoder"><img src="https://avatars.githubusercontent.com/u/74118796?v=4?s=100" width="100px;" alt=""/><br /><sub><b>FabrizioCoder</b></sub></a><br /><a href="https://github.com/Darkflame72/defectio/commits?author=FabrizioCoder" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
