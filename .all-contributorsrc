@@ -67,6 +67,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "FabrizioCoder",
+      "name": "FabrizioCoder",
+      "avatar_url": "https://avatars.githubusercontent.com/u/74118796?v=4",
+      "profile": "https://github.com/FabrizioCoder",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
